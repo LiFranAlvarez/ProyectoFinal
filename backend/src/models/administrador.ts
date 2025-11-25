@@ -1,4 +1,4 @@
-import { Usuario } from "./usuario";
+import { Usuario } from "./usuario.js";
 import { Curso } from "./curso.js";
 
 export class Administrador extends Usuario {
@@ -36,3 +36,4 @@ export class Administrador extends Usuario {
         console.log(`El curso "${curso.getTitulo()}" fue ${activo ? 'activado' : 'desactivado'} por ${this.nombre}`);
     }
 }
+export default Administrador ;

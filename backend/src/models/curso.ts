@@ -1,11 +1,7 @@
-import { Estudiante } from "./estudiante";
-import { Docente } from './docente';
-import { Update } from "./interface/update";
-
+import { Estudiante } from "./estudiante.js";
+import { Docente } from "./docente.js";
 
 export class Curso {
-  private observadores: Update[] = [];
-
   constructor(
     protected id: number,
     protected codigo: string,
@@ -27,19 +23,11 @@ export class Curso {
   public getDocente(): Docente { return this.docente; }
   public isActivo(): boolean { return this.activo; }
 
-  agregarObservador(estudiante: Estudiante): void {
-    this.observadores.push(estudiante);
-  }
-
-  notificarObservadores(mensaje: string): void {
-    this.observadores.forEach(e => e.update(mensaje));
-  }
-
   public setActivo(estado: boolean): void {
     this.activo = estado;
   }
 
- 
+  
   public agregarLeccion(titulo: string): void {
     this.lecciones.push(titulo);
     console.log(`Lección "${titulo}" agregada al curso ${this.titulo}.`);

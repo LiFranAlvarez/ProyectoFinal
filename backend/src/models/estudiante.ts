@@ -1,6 +1,5 @@
-import { Usuario } from "./usuario";
-import { Curso } from "./curso";
-import { Update } from "./interface/update";
+import { Usuario } from "./usuario.js";
+import { Curso } from "./curso.js";
 
 export class Estudiante extends Usuario {
   constructor(
@@ -17,10 +16,6 @@ export class Estudiante extends Usuario {
     super(id, nombre, apellido, email, password, rol, conectado);
   }
 
-  public update(mensaje: string): void {
-    console.log(`Notificación para ${this.getNombre()}: ${mensaje}`);
-  }
-
   public inscribirseCurso(curso: Curso): void {
     if (!this.cursosInscriptos.includes(curso)) {
       this.cursosInscriptos.push(curso);
@@ -35,3 +30,4 @@ export class Estudiante extends Usuario {
     console.log(`${this.nombre} revisa su progreso en los cursos.`);
   }
 }
+export default Estudiante ;
