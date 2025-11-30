@@ -1,0 +1,25 @@
+button {
+  width:auto;
+  min-width: 100px;
+  height: 45px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 2.5px solid #1d4ed8;
+  box-shadow: 0px 0px 20px -20px;
+  gap: 1rem;  
+  cursor: pointer;
+  background-color: white;
+  transition: all 0.2s ease-in-out 0ms;
+  user-select: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+button:hover {
+  background-color: #c1d5ef;
+  border-color: #1d4ed8;
+  box-shadow: 0px 0px 20px -18px;
+}
+
+button:active {
+  transform: scale(0.95);
+}

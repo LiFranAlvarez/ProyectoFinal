@@ -1,0 +1,58 @@
+.perfil { 
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
+  font-family: poppins;
+  background-color: #c1d5ef;
+}
+
+
+.perfil-card{
+  background:white;
+  padding:1.5rem;
+  border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.09);
+  margin-bottom:2rem;
+  display:flex;
+  flex-direction:column;
+  gap:.6rem;
+}
+
+.btn-edit{
+  margin-top:1rem;
+  background:#4a89ff;
+  padding:.6rem;
+  color:white;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.perfil-cursos h2{
+  margin-bottom:.8rem;
+}
+
+.curso-grid{
+  display:grid;
+  gap:1rem;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+}
+
+.curso-card{
+  background:white;
+  padding:1rem;
+  border-radius:10px;
+  box-shadow:0 3px 8px rgba(0,0,0,.08);
+}
+
+.badge{
+  padding:.3rem .7rem;
+  border-radius:6px;
+  font-size:.8rem;
+  color:white;
+}
+
+.en\ curso{ background:#ffb133 }
+.completado{ background:#4caf50 }
+.pendiente{ background:#777 }

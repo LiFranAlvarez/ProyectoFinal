@@ -1,0 +1,109 @@
+
+.curso-header-centered {
+    text-align: center;
+    padding: 20px;
+    background-color: #c1d5ef;
+    border-bottom: 2px solid #000000;
+    margin-bottom: 30px;
+}
+
+.curso-titulo {
+    font-size: 2.5rem;
+    color: #1a202c;
+    margin-bottom: 10px;
+}
+
+.curso-docente {
+    color: #4a5568;
+    margin-top: 10px;
+}
+
+.alumno-acciones, .btn-group-profesor, .btn-group-acciones {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-inscripcion, .btn-editar-curso, .btn-reinscribir {
+    padding: 10px 20px;
+    background-color: #1d4ed8; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.6s,;
+}
+
+.btn-cancelar-edicion {
+    border-color: red;
+    background-color: #e47070; 
+    color: black;
+}
+
+.clases-list {
+    list-style: none;
+    padding: 0;
+}
+
+.clase-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.clase-link {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.input-readonly {
+    border: none;
+    background-color: #f7fafc;
+    padding: 8px;
+    border-radius: 4px;
+    width: 250px;
+    color: #718096;
+}
+
+.input-editable {
+    border: 1px solid #4c51bf;
+    background-color: white;
+    padding: 8px;
+    border-radius: 4px;
+    width: 250px;
+}
+
+.materiales-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.material-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #a0aec0;
+    border-radius: 6px;
+    background-color: #f7fafc;
+}
+
+.material-item-row a {
+    text-decoration: none;
+    color: #2b6cb0;
+    flex-grow: 1; 
+}
+
+.material-titulo {
+    font-weight: 600;
+}
