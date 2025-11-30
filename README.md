@@ -12,62 +12,7 @@ Este proyecto es un sistema completo para la gestión de cursos online compuesto
 
 UML
 
-```mermaid
-classDiagram
-    direction LR
-
-    class Usuario {
-        +id: number
-        +nombre: string
-        +email: string
-        +password: string
-        +rol: string
-        +createdAt: Date
-        +updatedAt: Date
-    }
-
-    class Curso {
-        +id: number
-        +titulo: string
-        +descripcion: string
-        +categoria: string
-        +profesorId: number
-        +createdAt: Date
-        +updatedAt: Date
-    }
-
-    class Clase {
-        +id: number
-        +titulo: string
-        +contenido: string
-        +cursoId: number
-        +createdAt: Date
-        +updatedAt: Date
-    }
-
-    class Material {
-        +id: number
-        +titulo: string
-        +url: string
-        +claseId: number
-        +createdAt: Date
-        +updatedAt: Date
-    }
-
-    class Inscripcion {
-        +id: number
-        +usuarioId: number
-        +cursoId: number
-        +fecha: Date
-    }
-
-    %% Relaciones
-    Usuario "1" --> "many" Curso : dicta >
-    Usuario "1" --> "many" Inscripcion : realiza >
-    Curso "1" --> "many" Clase : contiene >
-    Clase "1" --> "many" Material : tiene >
-    Curso "1" --> "many" Inscripcion : inscriptos >
-    ```mermaid
+![Diagrama UML](./UML.png)
 
 
 Funcionalidades principales
