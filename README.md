@@ -1,30 +1,31 @@
-Grupo 25
+# Grupo 25
 
 Integrantes: Angelina Rossi y Alvarez Lisandro.
 
-Documentación del Proyecto
+# Documentación del Proyecto
 
-Sistema de Gestión de Cursos Online
+# Sistema de Gestión de Cursos Online
 
-Descripción General
+# Descripción General
 
 Este proyecto es un sistema completo para la gestión de cursos online compuesto por un backend en Node.js + TypeScript y un frontend en React + Vite. El objetivo principal del sistema es permitir la administración de cursos, usuarios y contenido educativo, brindando una experiencia fluida tanto para alumnos como para administradores.
 
-UML
+# UML
 
 ![Diagrama UML](./UML.png)
 
 
-Funcionalidades principales
+# Funcionalidades principales
 
-Frontend
+# Frontend
 
 Interfaz moderna en React
 Gestión de usuarios
 Listado y visualización de cursos
 Autenticación
 Consumo de API REST
-Backend
+
+# Backend
 
 API REST con Express
 Rutas protegidas y sistema de autenticación
@@ -32,13 +33,14 @@ Gestión de cursos, usuarios y sesiones
 Validación de datos
 Tecnologías utilizadas
 
-Backend
+# Backend
 
 Node.js + Express
 TypeScript
 JWT para autenticación
 Dotenv para configuración
-Frontend
+
+# Frontend
 
 React + Vite
 TypeScript
@@ -46,9 +48,9 @@ React Router
 Fetch API para comunicación con backend
 Instalación
 
-Clonar el repositorio git clone https://github.com/LiFranAlvarez/ProyectoFinal.git
+# Clonar el repositorio git clone https://github.com/LiFranAlvarez/ProyectoFinal.git
 
-En windows(como administrador):
+# En windows(como administrador):
 
 # Verificar si Winget está disponible
 winget --version
@@ -67,7 +69,7 @@ net start MongoDB
 # Mostrar estado del servicio
 Get-Service MongoDB
 
-En linux
+# En linux
 
 # Importar clave de MongoDB
 curl -fsSL https://pgp.mongodb.com/server-7.0.asc | \
@@ -97,14 +99,14 @@ sudo systemctl status mongod
 mongod --version
 mongosh --version
 
-Backend
+# Para levantar Backend
 
 cd backend
 npm install
 npm run build
 npm run dev
 
-Frontend
+# Para levantar Frontend
 
 cd frontend
 npm install
@@ -112,7 +114,7 @@ npm run dev
 
 
 
-POST MAN
+# POST MAN
 
 1|cargar un profesor -> POST http://localhost:3000/api/usuario 
 { "nombre": "PROFESOR 1 ", "email": "profesor1@hotmail.com", "password": "profesor" , "rol": "PROFESOR" }
@@ -128,7 +130,7 @@ POST MAN
 
 { "titulo": "Programación Backend con Node.js", "descripcion": "Curso práctico sobre Node.js, Express, arquitectura de APIs y conexión con bases de datos.", "estado": "PENDIENTE", "profesor": { "ID PROFESOR" }, "clases": [ { "_id":"ID DE PRMER CLASE" }, { "_id":"ID DE SEGUNDA CLASE" } ], "materiales": [ { "_id":"ID DE UN MATERIAL" }, { "_id":"ID DE OTRO MATERIAL" } ], "categorias": [ "Backend", "APIs", "JavaScript" ] }
 
-La API sigue formato REST e incluye:
+# La API sigue formato REST e incluye:
 
 Autenticación (login/register)
 
@@ -138,9 +140,7 @@ Gestión de usuarios
 
 Envío y recepción de datos en JSON
 
-Documentación Técnica Interna
-
-Decisiones de arquitectura
+# Decisiones de arquitectura
 
 Se eligió Node.js + Express por su rapidez para prototipado de APIs REST.
 Se utiliza TypeScript para mejorar mantenibilidad y escalabilidad.
