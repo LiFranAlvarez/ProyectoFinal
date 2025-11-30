@@ -5,7 +5,7 @@ const Footer = () => {
       padding: '1rem', 
       textAlign: 'center', 
       marginTop:"1rem"}}>
-      <small>© 2025 - Proyecto Final</small>
+      <small>© 2025 - Proyecto Final Grupo 25</small>
     </footer>
   );
 };
