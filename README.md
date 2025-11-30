@@ -10,6 +10,64 @@ Descripción General
 
 Este proyecto es un sistema completo para la gestión de cursos online compuesto por un backend en Node.js + TypeScript y un frontend en React + Vite. El objetivo principal del sistema es permitir la administración de cursos, usuarios y contenido educativo, brindando una experiencia fluida tanto para alumnos como para administradores.
 
+UML
+
+classDiagram
+    direction LR
+
+    class Usuario {
+        +id: number
+        +nombre: string
+        +email: string
+        +password: string
+        +rol: string
+        +createdAt: Date
+        +updatedAt: Date
+    }
+
+    class Curso {
+        +id: number
+        +titulo: string
+        +descripcion: string
+        +categoria: string
+        +profesorId: number
+        +createdAt: Date
+        +updatedAt: Date
+    }
+
+    class Clase {
+        +id: number
+        +titulo: string
+        +contenido: string
+        +cursoId: number
+        +createdAt: Date
+        +updatedAt: Date
+    }
+
+    class Material {
+        +id: number
+        +titulo: string
+        +url: string
+        +claseId: number
+        +createdAt: Date
+        +updatedAt: Date
+    }
+
+    class Inscripcion {
+        +id: number
+        +usuarioId: number
+        +cursoId: number
+        +fecha: Date
+    }
+
+    %% Relaciones
+    Usuario "1" --> "many" Curso : dicta >
+    Usuario "1" --> "many" Inscripcion : realiza >
+    Curso "1" --> "many" Clase : contiene >
+    Clase "1" --> "many" Material : tiene >
+    Curso "1" --> "many" Inscripcion : inscriptos >
+
+
 Funcionalidades principales
 
 Frontend
@@ -41,18 +99,71 @@ React Router
 Fetch API para comunicación con backend
 Instalación
 
-Clonar el repositorio git clone https://github.com/LiFranAlvarez/MetodologiaDeSistemas-II.git
+Clonar el repositorio git clone https://github.com/LiFranAlvarez/ProyectoFinal.git
+
+En windows(como administrador):
+
+# Verificar si Winget está disponible
+winget --version
+
+# Instalar MongoDB Server + Mongosh
+winget install MongoDB.Server --source winget
+winget install MongoDB.Shell
+
+# Verificar instalación
+mongod --version
+mongosh --version
+
+# Iniciar servicio de MongoDB
+net start MongoDB
+
+# Mostrar estado del servicio
+Get-Service MongoDB
+
+En linux
+
+# Importar clave de MongoDB
+curl -fsSL https://pgp.mongodb.com/server-7.0.asc | \
+sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+
+# Agregar repositorio oficial (Ubuntu 22.04 Jammy)
+echo "deb [signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg] \
+https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | \
+sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
+# Actualizar lista de paquetes
+sudo apt update
+
+# Instalar MongoDB
+sudo apt install -y mongodb-org
+
+# Iniciar MongoDB
+sudo systemctl start mongod
+
+# Habilitar inicio automático
+sudo systemctl enable mongod
+
+# Verificar estado
+sudo systemctl status mongod
+
+# Verificar instalación
+mongod --version
+mongosh --version
 
 Backend
+
 cd backend
 npm install
 npm run build
 npm run dev
 
 Frontend
+
 cd frontend
 npm install
 npm run dev
+
+
 
 POST MAN
 
