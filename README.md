@@ -12,6 +12,7 @@ Este proyecto es un sistema completo para la gestión de cursos online compuesto
 
 UML
 
+```mermaid
 classDiagram
     direction LR
 
@@ -66,6 +67,7 @@ classDiagram
     Curso "1" --> "many" Clase : contiene >
     Clase "1" --> "many" Material : tiene >
     Curso "1" --> "many" Inscripcion : inscriptos >
+    ```mermaid
 
 
 Funcionalidades principales
