@@ -13,8 +13,6 @@ const usuarioSchema = new Schema({
         enum : ['ADMIN' , 'PROFESOR' , 'ALUMNO'],
         default: "ALUMNO"
     },
-    cursosCompletados: [{ type: Schema.Types.ObjectId, ref: "Curso" }],
-    cursosEnCurso: [{ type: Schema.Types.ObjectId, ref: "Curso" }],
 
 });
 
