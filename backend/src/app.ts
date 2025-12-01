@@ -47,7 +47,6 @@ class Server {
     }
     async start(callback: () => void) {
         await Database.getInstance();
-        ///createAdmin();
         this.app.listen(this.port, callback);
     }
 }

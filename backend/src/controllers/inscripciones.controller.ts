@@ -6,10 +6,10 @@ class InscripcionesController{
     async nuevaInscripcion( req: Request, res: Response ){
         try {
             const { idCurso, idUser} = req.params;
-            console.log("Inscripción solicitada para:", idCurso, idUser); // Log de los IDs recibidos
+            console.log("Inscripción solicitada para:", idCurso, idUser); 
             const result = await InscripcionesService.createOne(idCurso, idUser);
             
-            // ... (manejo de result === null)
+           
             
             res.status(201).json(result);
         } catch (error) {

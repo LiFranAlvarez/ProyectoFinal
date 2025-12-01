@@ -43,7 +43,6 @@ class CursosController{
         try {
             const data = req.body;
             console.log(data)
-            // Normalizar profesor: si viene como objeto {$oid: "..."} lo convertimos
             const profesorId = typeof data.profesor === "object" && data.profesor.$oid 
             ? data.profesor.$oid 
             : data.profesor;
@@ -60,7 +59,7 @@ class CursosController{
 
             const result = await CursosService.createOne({
             ...data,
-            profesor: profesorId // guardamos como string
+            profesor: profesorId 
             });
 
             res.status(201).json(result);

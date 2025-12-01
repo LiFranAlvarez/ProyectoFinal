@@ -20,7 +20,7 @@ const CatalogoCursos = () => {
         const data = await res.json();
         const normalizados = data.map((c: any) => ({
           ...c,
-          descripcion: c.descripcion || c.describe || "", // 👈 asegura que siempre haya algo
+          descripcion: c.descripcion || c.describe || "",
         }));
         setTodosLosCursos(normalizados);
         setResultados(normalizados);
