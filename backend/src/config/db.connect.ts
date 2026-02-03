@@ -25,7 +25,7 @@ export default class Database {
             }
     }
     public static async getInstance(){
-        if (Database.instancia == null) {
+        if (Database.instancia === null) {
             Database.instancia = new Database();
             await Database.instancia.connectDb();
         }

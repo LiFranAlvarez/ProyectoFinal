@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Curso } from "../types/cursoType"; 
 import { Clase } from "../types/claseType"; 
 import { Material } from "../types/materialType"; 
@@ -32,18 +31,17 @@ const CursoDetalle: React.FC<Props> = ({ curso }) => {
       return
     } 
     
-    (getCursosByUser(usuario._id!) as Promise<Inscripcion[]>)
+    (getCursosByUser(usuario._id) as Promise<Inscripcion[]>)
       .then(inscripciones => {
         
         const inscripcionEncontrada = inscripciones.find(i => {
-          
-          const cursoEnInscripcion = (i as any).cursoId; 
+          const cursoEnInscripcion = i.curso as unknown as { _id: string } | string; 
           
           let cursoInscritoId: string | undefined;
 
           if (cursoEnInscripcion && typeof cursoEnInscripcion === 'object') {
               cursoInscritoId = cursoEnInscripcion._id; 
-          } else if (typeof cursoEnInscripcion === 'string') {
+          } else {
               cursoInscritoId = cursoEnInscripcion;
           }
 
@@ -53,8 +51,7 @@ const CursoDetalle: React.FC<Props> = ({ curso }) => {
         if (!inscripcionEncontrada) {
           return setEstado("NO_INSCRIPTO");
         }
-
-        setEstado((inscripcionEncontrada as any).estadoInscripcion); 
+        setEstado(inscripcionEncontrada.estado);  
       })
       .catch(error => {
           console.error("Error al cargar estado de inscripción:", error);
@@ -62,10 +59,7 @@ const CursoDetalle: React.FC<Props> = ({ curso }) => {
       });
       
   }, [usuario, curso._id, esAlumno]);
-  const handleInscribirse = async () => { 
-    console.log("Intentando inscribirse:", { 
-      cursoId: curso._id, usuarioId: usuario?._id 
-    }); 
+  const handleInscribirse = async () => {  
     if (!usuario || !curso._id) { 
       alert("Necesitas iniciar sesión para inscribirte."); 
       return; 

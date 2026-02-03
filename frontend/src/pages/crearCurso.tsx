@@ -28,19 +28,19 @@ const CrearCurso = () => {
             });
 
             if (!res.ok) {
-                const err = await res.json().catch(() => ({}));
-                const errorMessage = err.message || `Error ${res.status}: Fallo en el servidor.`; 
-                throw new Error(errorMessage);
+                const err = await res.json().catch(() => ({ message: 'Error desconocido' })) as { message: string };
+                throw new Error(err.message || `Error ${res.status}: Fallo en el servidor.`);
             }
 
             
             alert('Curso creado con éxito'); 
             navigate('/dashboard/maestro');
         
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-            console.error('Error al crear curso:', error.message || error);
-            alert('No se pudo crear el curso: ' + (error.message || error));
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : 'Ocurrió un error inesperado';
+            
+            console.error('Error al crear curso:', errorMessage);
+            alert('No se pudo crear el curso: ' + errorMessage);
         }
     };
 

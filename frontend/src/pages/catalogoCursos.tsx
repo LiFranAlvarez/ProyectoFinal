@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { useBusqueda } from '../context/busquedaContexto';
 import { Curso } from '../types/cursoType';
@@ -13,15 +12,17 @@ const CatalogoCursos = () => {
   useEffect(() => {
     const cargarCursos = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/cursos');
-
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+        const res = await fetch(`${API_URL}/cursos`);
         if (!res.ok) throw new Error("No se pudieron obtener los cursos");
 
-        const data = await res.json();
-        const normalizados = data.map((c: any) => ({
-          ...c,
-          descripcion: c.descripcion || c.describe || "", // 👈 asegura que siempre haya algo
-        }));
+        const data:unknown[] = await res.json();
+        const normalizados: Curso[] = data.map((item)=>{const c = item as Curso & { describe?: string }; // Intersección temporal para la limpieza
+          return {
+            ...c,
+            descripcion: c.descripcion || c.describe || "Sin descripción disponible",
+          };
+        });
         setTodosLosCursos(normalizados);
         setResultados(normalizados);
 

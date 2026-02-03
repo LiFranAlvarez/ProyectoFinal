@@ -1,6 +1,5 @@
 import Inscripciones from "../models/inscripciones";
 import Usuario from '../models/usuario.schema';
-import Curso from '../models/curso.schema';
 import HttpError from '../utils/httpError';
 
 
@@ -16,25 +15,23 @@ class InscripcionService{
                 cursoId: idCurso,
                 usuarioId: idUser
             });;
-        } catch (error: any) {
+        } catch (error: unknown) {
             
             console.error("Error detallado de Mongoose en createOne:", error); 
-            
-            if (error.name === 'CastError') {
-                throw new HttpError("IDs de Curso o Usuario inválidos. Verifique el formato.", 400); 
+           if (error && typeof error === 'object' && 'name' in error && error.name === 'CastError') {
+                throw new HttpError("IDs de Curso o Usuario inválidos. Verifique el formato.", 400);
             }
-            
-            throw new HttpError("Fallo desconocido al crear la inscripción", 500);
-        }
-    };
 
+            throw new HttpError("Fallo desconocido al crear la inscripción", 500);
+        };
+    };
     async cancelOne( idInsc: string ){
         try {
-            const result = Inscripciones.findByIdAndUpdate(idInsc, {estadoInscripcion : 'CANCELADA'},{
+            const result = await Inscripciones.findByIdAndUpdate(idInsc, {estadoInscripcion : 'CANCELADA'},{
                 new : true
             })
             return result;
-        } catch (error) {
+        } catch {
             throw new HttpError("No se pudo cancelar inscripcion", 500);
         }
     };
@@ -49,13 +46,12 @@ class InscripcionService{
                     return [];
                 }
                 const userIDs = [...new Set(inscripciones.map(i => i.usuarioId))];
-                 console.log(userIDs);
                 const alumnosInscritos = await Usuario.find({
                     _id: { $in: userIDs },
                     rol: 'ALUMNO'
                 }).select('nombre apellido email rol');
                 return alumnosInscritos;
-            } catch (error) {
+            } catch {
                 throw new HttpError("No se pudo obtener los usuarios del curso", 500); 
             }
     };
@@ -74,15 +70,15 @@ class InscripcionService{
             
             return inscripcionesCompletas; 
             
-        } catch (error) {
+        } catch {
             throw new HttpError("No se pudo obtener las inscripciones del usuario", 500);
         }
     };
     async getAll(){
         try {
             return await Inscripciones.find();
-        } catch (error) {
-            
+        } catch {
+            throw new HttpError("No se pudieron obtener las inscripciones", 500);
         }
     }
     

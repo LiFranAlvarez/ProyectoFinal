@@ -24,14 +24,11 @@ class Server {
     middlewares(){
         this.app.use(express.json({limit: '150mb'}));
 
-        // Logger HTTP
         this.app.use(morgan('dev'));
-        // Log simple request info for debugging
         this.app.use((req, _res, next) => {
             console.log('REQ:', req.method, req.originalUrl);
             next();
         });
-        //cors
         this.app.use( cors());
     }
     routes(){
@@ -47,7 +44,6 @@ class Server {
     }
     async start(callback: () => void) {
         await Database.getInstance();
-        ///createAdmin();
         this.app.listen(this.port, callback);
     }
 }

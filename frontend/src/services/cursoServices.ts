@@ -2,11 +2,10 @@ import { Curso } from "../types/cursoType";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-export const getCursos = async (): Promise<Curso[]> => {
-  const res = await fetch(`${API_URL}/api/cursos`);
-  if (!res.ok) throw new Error("Error al obtener cursos");
-  return res.json();
-};
+const getHeaders = () => ({
+  "Content-Type": "application/json",
+  "Authorization": `Bearer ${localStorage.getItem("token")}`,
+});
 
 export const getCursoById = async (idCurso: string | number): Promise<Partial<Curso>> => {
   
@@ -21,10 +20,10 @@ export const getCursoById = async (idCurso: string | number): Promise<Partial<Cu
   return res.json();
 };
 
-export const createCurso = async (curso: Curso): Promise<Curso> => {
+export const createCurso = async (curso: Partial<Curso>): Promise<Curso> => {
   const res = await fetch(`${API_URL}/api/cursos`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getHeaders(),
     body: JSON.stringify(curso),
   });
   if (!res.ok) throw new Error("Error al crear curso");
@@ -34,10 +33,7 @@ export const createCurso = async (curso: Curso): Promise<Curso> => {
 export const updateCurso = async (idCurso: string | number, curso: Curso): Promise<Partial<Curso>> => {
   const res = await fetch(`${API_URL}/api/cursos/${idCurso}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
+    headers: getHeaders(),
     body: JSON.stringify(curso),
   });
   if (!res.ok) throw new Error("Error al actualizar curso");
@@ -54,8 +50,7 @@ export const deleteCurso = async (idCurso: string | number): Promise<void> => {
   if (!res.ok) throw new Error("Error al eliminar curso");
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getCursosByProfesor = async (idCursoProfesor: string): Promise<any[]> => {
+export const getCursosByProfesor = async (idCursoProfesor: string): Promise<Curso[]> => {
   const res = await fetch(`${API_URL}/api/cursos/profesor/${idCursoProfesor}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,

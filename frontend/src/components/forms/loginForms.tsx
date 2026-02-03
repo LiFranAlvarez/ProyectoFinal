@@ -10,7 +10,6 @@ const decodeJwt = (token: string) => {
     const payload = token.split('.')[1];
     const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
     return JSON.parse(decoded) as { rol?: string; _id?: string };
-    console.log(decoded)
   } catch {
     return null;
   }

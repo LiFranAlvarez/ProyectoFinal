@@ -1,8 +1,8 @@
 import UserService from '../services/user.service';
 import { Request, Response } from 'express';
 import bcrypt  from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import HttpError from '../utils/httpError';
+import {CreateUserDTO, IUserResponse } from '../dtos/userDTO';
 
 
 
@@ -14,39 +14,37 @@ class UserController{
             if (typeof nombre !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
                 throw new Error("Los campos al crear un usuario deben ser string");
             }
-            const passwordHass = bcrypt.hashSync(password, 10);
-            const result = await UserService.createOneUser({ nombre, email, passwordHass, rol: finalRol });
-            if (result === null) {
-                return res.status(200).json({ message : 'No se pudo crear el Usuario'});
-            }
+            const passwordHash = bcrypt.hashSync(password, 10);
+            const userData: CreateUserDTO = { 
+                nombre, 
+                email, 
+                passwordHash, 
+                rol: finalRol 
+            };
+
+            const result = await UserService.createOneUser(userData);
+            
+            if (!result) {
+                return res.status(200).json({ message: 'No se pudo crear el Usuario' });}
             res.status(201).json(result);
-        } catch (error) {
-            if (error instanceof HttpError) {
-                return res.status(error.status).json({message : error.message})
-            }
-            console.error(error);
-            res.status(400).json(error);
+        } catch (error: unknown) {
+          this.handleError(res, error);
         }
-    
     };
     async getUsers(req:Request,res:Response){
         try {
-            const result = await UserService.getAllUsers();
+            const result: IUserResponse[] = await UserService.getAllUsers();
             if (!result || result.length === 0) {
                 return res.status(200).json({ message: 'No hay usuarios cargados' });
             }
-            const sanitized = result.map((u: any) => {
+            const sanitized = result.map((u) => {
                 const obj = u.toObject ? u.toObject() : { ...u };
-                delete obj.passwordHass;
+                delete obj.passwordHash;
                 return obj;
             });
             res.status(200).json(sanitized);
-        } catch (error) {
-            if (error instanceof HttpError) {
-                return res.status(error.status).json({message : error.message})
-            }
-            console.error(error);
-            res.status(400).json(error);
+        } catch (error: unknown) {
+            this.handleError(res, error);
         }
     };
 
@@ -101,6 +99,14 @@ class UserController{
             res.status(400).json(error);
         }
     };
+    private handleError(res: Response, error: unknown) {
+        if (error instanceof HttpError) {
+            return res.status(error.status).json({ message: error.message });
+        }
+        const message = error instanceof Error ? error.message : "Fallo desconocido";
+        console.error(error);
+        res.status(400).json({ message });
+    }
     
 };
 

@@ -7,6 +7,6 @@ export default [
   ...tseslint.configs.recommended,
   prettierConfig,
   {
-    ignores: ['dist/**', 'node_modules/**'],
+    ignores: ['dist/**', 'node_modules/**', '.git/**', '.env', '.env.example', 'package-lock.json', 'yarn.lock'],
   },
 ]

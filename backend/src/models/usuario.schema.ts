@@ -7,7 +7,7 @@ const usuarioSchema = new Schema({
         type : String,
         unique : true
     },
-    passwordHass : String,
+    passwordHash : String,
     rol : {
         type : String,
         enum : ['ADMIN' , 'PROFESOR' , 'ALUMNO'],

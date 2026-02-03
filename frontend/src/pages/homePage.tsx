@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Curso } from "../types/cursoType";
@@ -14,21 +13,25 @@ const HomePage: React.FC = () => {
     useEffect(() => {
         const fetchCursos = async () => {
             try {
-                const resp = await fetch("http://localhost:3000/api/cursos");
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+                const resp = await fetch(`${API_URL}/cursos`);
                 if (!resp.ok) throw new Error("No se pudieron cargar los cursos");
                 
-                const data = await resp.json();
-                const tresPrimerosCursos = data.slice(0, 3);
-                const normalizados = tresPrimerosCursos.map((c: any) => ({
-                    ...c,
-                    descripcion: c.descripcion || c.describe || "", 
-                    categorias: Array.isArray(c.categorias) ? c.categorias : [], 
-                }));
+                const data:unknown[] = await resp.json();
+                const tresPrimerosCursos = data.slice(0, 3).map((item) => {
+                    const c = item as Curso & { describe?: string }; // Cast controlado
+                    return {
+                        ...c,
+                        descripcion: c.descripcion || c.describe || "Sin descripción disponible", 
+                        categorias: Array.isArray(c.categorias) ? c.categorias : [], 
+                    };
+                });
 
-                setCursos(normalizados);
+                setCursos(tresPrimerosCursos);
 
-            } catch (err: any) {
-                setError(err.message);
+             } catch (err: unknown) { 
+                const message = err instanceof Error ? err.message : "Error desconocido";
+                setError(message);
             } finally {
                 setLoading(false);
             }

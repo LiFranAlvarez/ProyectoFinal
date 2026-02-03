@@ -9,14 +9,14 @@ const loginService = async ( email:string, password: string) => {
             console.log('loginService: user not found for', email);
             return null;
         }
-        const comparePassword = user.passwordHass;
+        const comparePassword = user.passwordHash;
         if (!comparePassword) {
-            console.log('loginService: user has no passwordHass');
+            console.log('loginService: user has no passwordHash');
             return null;
         }
         const isValid = await bcryptjs.compare(password, comparePassword);
         console.log('loginService: password match?', isValid);
-        if (!isValid) return null;
+        if (!isValid) {return null};
         return user;
     } catch (error) {
         console.error('loginService error', error);

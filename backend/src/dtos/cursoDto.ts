@@ -7,4 +7,4 @@ export interface CreateCursoDTO {
   profesor: string;
 }
 
-export interface UpdateCursoDTO extends Partial<CreateCursoDTO> {}
+export type UpdateCursoDTO = Partial<CreateCursoDTO>;

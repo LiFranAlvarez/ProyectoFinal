@@ -5,12 +5,8 @@ import HttpError from '../utils/httpError';
 class InscripcionesController{
     async nuevaInscripcion( req: Request, res: Response ){
         try {
-            const { idCurso, idUser} = req.params;
-            console.log("Inscripción solicitada para:", idCurso, idUser); // Log de los IDs recibidos
+            const { idCurso, idUser} = req.params; // Log de los IDs recibidos
             const result = await InscripcionesService.createOne(idCurso, idUser);
-            
-            // ... (manejo de result === null)
-            
             res.status(201).json(result);
         } catch (error) {
             if (error instanceof HttpError) {
@@ -38,7 +34,6 @@ class InscripcionesController{
         try {
             const idCurso = req.params.idCurso;
             const result = await InscripcionesService.getUsers(idCurso);
-            console.log(result);
             res.status(200).json(result);
         } catch (error) {
             if (error instanceof HttpError) {
@@ -65,8 +60,8 @@ class InscripcionesController{
         try {
             const result = await inscripcionesService.getAll();
             res.status(200).json(result);
-        } catch (error) {
-            
+        } catch  {
+            res.status(500).json({ error: "Error al obtener inscripciones" });
         }
     };
 }

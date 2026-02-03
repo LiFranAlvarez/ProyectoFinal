@@ -7,9 +7,7 @@ import  config  from '../config/config';
 async function  signInController( req : Request, res: Response ) {
     try {
         const { email, password} = req.body;
-        console.log('SIGNIN request body:', { email });
         const result = await signInService(email, password);
-        console.log('SIGNIN service result:', result);
 
         if (!result) {
             return res.status(401).json({message: 'No se pudo Iniciar Sesion'});
