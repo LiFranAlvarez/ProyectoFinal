@@ -26,7 +26,6 @@ class Server {
 
     this.app.use(morgan('dev'));
     this.app.use((req, _res, next) => {
-      console.log('REQ:', req.method, req.originalUrl);
       next();
     });
     this.app.use(cors());

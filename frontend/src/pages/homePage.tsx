@@ -19,7 +19,7 @@ const HomePage: React.FC = () => {
                 
                 const data:unknown[] = await resp.json();
                 const tresPrimerosCursos = data.slice(0, 3).map((item) => {
-                    const c = item as Curso & { describe?: string }; // Cast controlado
+                    const c = item as Curso & { describe?: string }; 
                     return {
                         ...c,
                         descripcion: c.descripcion || c.describe || "Sin descripción disponible", 

@@ -18,7 +18,6 @@ export const BusquedaProvider = ({ children }: { children: React.ReactNode }) =>
   );
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useBusqueda = () => {
   const context = useContext(BusquedaContext);
   if (!context) throw new Error('useBusqueda debe usarse dentro de BusquedaProvider');

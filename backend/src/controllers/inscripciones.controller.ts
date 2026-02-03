@@ -5,7 +5,7 @@ import HttpError from '../utils/httpError';
 class InscripcionesController {
   async nuevaInscripcion(req: Request, res: Response) {
     try {
-      const { idCurso, idUser } = req.params; // Log de los IDs recibidos
+      const { idCurso, idUser } = req.params;
       const result = await InscripcionesService.createOne(idCurso, idUser);
       res.status(201).json(result);
     } catch (error) {
