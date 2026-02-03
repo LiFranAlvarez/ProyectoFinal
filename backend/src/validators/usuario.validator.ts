@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const createUsuarioSchema = z.object({
   nombre: z.string().min(2, 'Nombre muy corto'),

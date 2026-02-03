@@ -14,12 +14,12 @@ cursoRouter.post(
   authenticate,
   authorizeRole('ADMIN', 'PROFESOR'),
   CursosController.crearCurso
-); 
-cursoRouter.put('/cursos/:idCurso', authenticate, authorizeCursoEdit, CursosController.updateCurso); 
+);
+cursoRouter.put('/cursos/:idCurso', authenticate, authorizeCursoEdit, CursosController.updateCurso);
 cursoRouter.delete(
   '/cursos/:idCurso',
   authenticate,
   authorizeRole('ADMIN'),
   CursosController.deleteCurso
-); 
+);
 export default cursoRouter;
