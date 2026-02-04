@@ -1,14 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import Database from './config/db.connect.js';
-import userRouter from './routes/usuario.route.js';
-import cursoRouter from './routes/curso.routes.js';
-import inscripcionRouter from './routes/inscripciones.route.js';
-import authRouter from './routes/auth.route.js';
-import errorHandler from './middlewares/errorHandler.js';
-import claseRoutes from './routes/clase.routes.js';
-import materialRoutes from './routes/material.routes.js';
+import Database from './config/db.connect';
+import userRouter from './routes/usuario.route';
+import cursoRouter from './routes/curso.routes';
+import inscripcionRouter from './routes/inscripciones.route';
+import authRouter from './routes/auth.route';
+import errorHandler from './middlewares/errorHandler';
+import claseRoutes from './routes/clase.routes';
+import materialRoutes from './routes/material.routes';
 
 class Server {
   public app: express.Application;

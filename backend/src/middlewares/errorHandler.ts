@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import HttpError from '../utils/httpError.js';
+import HttpError from '../utils/httpError';
 
 function errorHandler(err: unknown, _req: Request, res: Response) {
   console.error('--- INTERNAL ERROR LOG ---');
