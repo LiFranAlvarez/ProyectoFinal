@@ -19,6 +19,7 @@ class Server {
     this.app = express();
     this.middlewares();
     this.routes();
+    this.app.use(errorHandler);
   }
 
   middlewares() {
@@ -37,8 +38,8 @@ class Server {
     this.app.use('/api', cursoRouter);
     this.app.use('/api', inscripcionRouter);
     this.app.use('/api', authRouter);
-    this.app.use(errorHandler);
   }
+
   async start(callback: () => void) {
     await Database.getInstance();
     this.app.listen(this.port, callback);
