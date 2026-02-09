@@ -7,18 +7,28 @@ import  config  from '../config/config';
 async function  signInController( req : Request, res: Response ) {
     try {
         const { email, password} = req.body;
-        console.log('SIGNIN request body:', { email });
         const result = await signInService(email, password);
-        console.log('SIGNIN service result:', result);
-
         if (!result) {
             return res.status(401).json({message: 'No se pudo Iniciar Sesion'});
         }
 
-        const token = Jwt.sign({_id : result.id, nombre: result.nombre, email: result.email, rol: result.rol}, config.SECRET,
-            { expiresIn : 3600}) //1HS
+        const accessToken = Jwt.sign(
+            { id: result.id, rol: result.rol },
+            config.SECRET,
+            { expiresIn: "1h" }
+            );
 
-            res.status(200).json({message: 'Inicio Sesion Correctamente', token : token});
+            const refreshToken = Jwt.sign(
+            { id: result.id },
+            config.REFRESH_SECRET,
+            { expiresIn: "7d" }
+            );
+
+            res.status(200).json({
+            message: "Inicio Sesión Correctamente",
+            accessToken,
+            refreshToken
+        });
     } catch (error) {
         if (error instanceof HttpError) {
             return res.status(error.status).json({message : error.message})

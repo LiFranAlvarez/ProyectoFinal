@@ -48,12 +48,14 @@ export const updateClase = async (idClase: string | number, clase: Clase): Promi
   return res.json();
 };
 
-export const deleteClase = async (idClase: string | number): Promise<void> => {
+export const deleteClase = async (idClase: string | number, cursoId?: string): Promise<void> => {
   const res = await fetch(`${API_URL}/api/clases/${idClase}`, {
     method: "DELETE",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
+    body: JSON.stringify({ cursoId }),
   });
   if (!res.ok) throw new Error("Error al eliminar clase");
 };

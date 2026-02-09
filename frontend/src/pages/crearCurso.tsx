@@ -1,50 +1,32 @@
 import CursoForm from '../components/forms/cursoForms';
 import { useNavigate } from 'react-router-dom';
 import { Curso } from '../types/cursoType';
-
+import { createCurso } from '../services/cursoServices'; 
 const CrearCurso = () => {
-    const navigate = useNavigate();
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+  const navigate = useNavigate();
 
-    const handleCrear = async (curso: Curso) => {
-        try {
-            const profesorId = localStorage.getItem('profesorId') || 'ID_DE_FALLBACK';
-
-            const payload = {
-                titulo: curso.titulo,
-                descripcion: curso.descripcion,
-                categorias: curso.categorias, 
-                profesor: profesorId, 
-                estado: 'EN CURSO', 
-            };
-
-            const res = await fetch('/api/cursos', {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    ...(token && { 'Authorization': `Bearer ${token}` })
-                },
-                body: JSON.stringify(payload),
-            });
-
-            if (!res.ok) {
-                const err = await res.json().catch(() => ({}));
-                const errorMessage = err.message || `Error ${res.status}: Fallo en el servidor.`; 
-                throw new Error(errorMessage);
-            }
-
-            
-            alert('Curso creado con éxito'); 
-            navigate('/dashboard/maestro');
-        
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-            console.error('Error al crear curso:', error.message || error);
-            alert('No se pudo crear el curso: ' + (error.message || error));
-        }
+ const handleCrear = async (curso: Curso) => {
+  try {
+    const payload = {
+      ...curso,
+      profesor: typeof curso.profesor === "string" 
+        ? curso.profesor 
+        : curso.profesor?._id, 
+      estado: "EN CURSO" as const,
     };
+    console.log("Payload para crear curso:", payload);
+    await createCurso(payload);
+    
 
-    return <CursoForm onSubmit={handleCrear} />;
+    alert("Curso creado con éxito");
+    navigate("/admin");
+  } catch (error: any) {
+    console.error("Error al crear curso:", error.message || error);
+    alert("No se pudo crear el curso: " + (error.message || error));
+  }
+};
+
+  return <CursoForm onSubmit={handleCrear} />;
 };
 
 export default CrearCurso;

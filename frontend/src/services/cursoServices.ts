@@ -22,12 +22,19 @@ export const getCursoById = async (idCurso: string | number): Promise<Partial<Cu
 };
 
 export const createCurso = async (curso: Curso): Promise<Curso> => {
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
   const res = await fetch(`${API_URL}/api/cursos`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      ...(token && { "Authorization": `Bearer ${token}` })
+    },
     body: JSON.stringify(curso),
   });
-  if (!res.ok) throw new Error("Error al crear curso");
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    throw new Error(error.message || "Error al crear curso");
+  }
   return res.json();
 };
 

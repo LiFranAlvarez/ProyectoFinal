@@ -2,57 +2,204 @@
   max-width: 800px;
   margin: auto;
   padding: 2rem;
-  font-family: poppins;
-  background-color: #c1d5ef;
+  font-family: 'Poppins', sans-serif;
+  background-color: #c1d5ef; /* fondo celeste */
+  border-radius: 12px;
 }
 
-
-.perfil-card{
-  background:white;
-  padding:1.5rem;
-  border-radius:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.09);
-  margin-bottom:2rem;
-  display:flex;
-  flex-direction:column;
-  gap:.6rem;
+/* Tarjeta de información personal */
+.perfil-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.09);
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
 }
 
-.btn-edit{
-  margin-top:1rem;
-  background:#4a89ff;
-  padding:.6rem;
-  color:white;
-  border-radius:8px;
-  border:none;
-  cursor:pointer;
-  font-weight:bold;
+.perfil-card label {
+  font-weight: 600;
+  color: #333;
 }
 
-.perfil-cursos h2{
-  margin-bottom:.8rem;
+.perfil-card span {
+  color: #555;
 }
 
-.curso-grid{
-  display:grid;
-  gap:1rem;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+/* Inputs y textarea en modo edición */
+.perfil-card input,
+.perfil-card textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  margin-top: 0.3rem;
+  border: 2px solid #4a89ff;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  background-color: #f9fbff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.curso-card{
-  background:white;
-  padding:1rem;
-  border-radius:10px;
-  box-shadow:0 3px 8px rgba(0,0,0,.08);
+.perfil-card input:focus,
+.perfil-card textarea:focus {
+  outline: none;
+  border-color: #2f66d0;
+  box-shadow: 0 0 6px rgba(74, 137, 255, 0.4);
 }
 
-.badge{
-  padding:.3rem .7rem;
-  border-radius:6px;
-  font-size:.8rem;
-  color:white;
+.perfil-card textarea {
+  min-height: 80px;
+  resize: vertical;
 }
 
-.en\ curso{ background:#ffb133 }
-.completado{ background:#4caf50 }
-.pendiente{ background:#777 }
+/* Foto de perfil */
+.foto-perfil {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.foto-perfil img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%; /* circular */
+  object-fit: cover;
+  border: 3px solid #4a89ff;
+}
+
+/* Botón editar/guardar */
+.btn-edit {
+  margin-top: 1rem;
+  background: #4a89ff;
+  padding: .6rem 1.2rem;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn-edit:hover {
+  background: #2f66d0;
+}
+
+/* Feedback visual */
+.mensaje-feedback {
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.mensaje-feedback.success {
+  background-color: #eafaf1;
+  color: #27ae60;
+}
+
+.mensaje-feedback.error {
+  background-color: #fdecea;
+  color: #e74c3c;
+}
+
+/* Sección estadísticas */
+.perfil-estadisticas {
+  margin-bottom: 2rem;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+}
+
+.stat-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,.08);
+  text-align: center;
+  flex: 1;
+}
+
+.stat-label {
+  display: block;
+  font-size: .9rem;
+  color: #555;
+}
+
+.stat-value {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #4a89ff;
+}
+
+/* Sección cursos */
+.perfil-cursos h2 {
+  margin-bottom: .8rem;
+  color: #2c3e50;
+}
+
+.curso-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+  /* cada curso ocupa mínimo 250px, y se distribuyen en columnas iguales */
+  align-items: stretch; /* todas las cards se estiran a la misma altura */
+}
+
+.curso-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* contenido distribuido */
+}
+
+@media (max-width: 768px) {
+  .curso-grid {
+    grid-template-columns: 1fr; /* todos los cursos en una columna */
+  }
+}
+
+/* Badges de estado */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;           /* más redondeado */
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* sombra sutil */
+  text-transform: uppercase;    /* texto en mayúsculas */
+  letter-spacing: 0.5px;
+}
+
+/* Estados con colores más modernos */
+.en-curso {
+  background: linear-gradient(135deg, #ffb133, #ffcc66);
+  animation: pulse 2s infinite; /* animación sutil */
+}
+
+.completado {
+  background: linear-gradient(135deg, #4caf50, #81c784);
+}
+
+.pendiente {
+  background: linear-gradient(135deg, #777, #999);
+}
+
+/* Animación para EN_CURSO */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 1; }
+}

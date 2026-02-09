@@ -48,12 +48,14 @@ export const updateMaterial = async (idMaterial: string | number, material: Mate
   return res.json();
 };
 
-export const deleteMaterial = async (idMaterial: string | number): Promise<void> => {
+export const deleteMaterial = async (idMaterial: string | number, cursoId?: string): Promise<void> => {
   const res = await fetch(`${API_URL}/api/materiales/${idMaterial}`, {
     method: "DELETE",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
+    body: JSON.stringify({ cursoId }),
   });
   if (!res.ok) throw new Error("Error al eliminar material");
 };

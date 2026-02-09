@@ -8,10 +8,12 @@ import CatalogoCursos from './src/pages/catalogoCursos';
 import CrearCurso from './src/pages/crearCurso';
 import CursoDetalle from './src/pages/cursosDetallesPage';
 import PerfilUsuario from './src/pages/perfilPages';
+import AdminPage from './src/pages/adminPage'; 
+import EditarCurso from './src/pages/editarCurso';
 
 const App = () => {
   return (
-      <Router>
+    <Router>
       <Header />
       <main style={{ padding: '2rem' }}>
         <Routes>
@@ -19,10 +21,12 @@ const App = () => {
           <Route path="/registro" element={<RegisterPage />} />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/cursos" element={<CatalogoCursos/>} />
-          <Route path="/cursos/crear" element={<CrearCurso/>}/>
+          <Route path="/admin/cursos/crear" element={<CrearCurso/>}/>
           <Route path="/cursos/:idCurso" element={<CursoDetalle/>}/>
+          <Route path="/admin/cursos/editar/:idCurso" element={<EditarCurso/>}/>
           <Route path="/perfil" element={<PerfilUsuario/>}/>
-          </Routes>
+          <Route path="/admin" element={<AdminPage/>}/> 
+        </Routes>
       </main>
       <Footer />
     </Router>
@@ -30,5 +34,3 @@ const App = () => {
 };
 
 export default App;
-
-

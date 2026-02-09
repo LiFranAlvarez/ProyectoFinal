@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import { Curso } from "../../types/cursoType"
 import { cursoSchema } from '../../utils/validaciones/validacionesCursos';
 import "../../styles/forms.css";
-
+import { getUsuarios } from '../../services/usuarioServices';
 type Props = {
   cursoInicial?: Curso;
   onSubmit: (curso: Curso) => void;
@@ -14,11 +14,10 @@ const CursoForm = ({ cursoInicial, onSubmit }: Props) => {
   const [formData, setFormData] = useState<Curso>(
     cursoInicial ?? 
     {
-      _id:"",
       titulo:"",
       descripcion:"",       
-      profesor:"",
-      categorias:[""],
+      profesor: "",
+      categorias:[],
       clases:[],
       materiales:[]
     }
@@ -26,6 +25,21 @@ const CursoForm = ({ cursoInicial, onSubmit }: Props) => {
 
   const [errors, setErrors] = useState<{ [key:string]:string }>({});
   const [nuevaCategoria, setNuevaCategoria] = useState("");
+  const [profesores, setProfesores] = useState<{ _id: string; nombre?: string }[]>([]);
+
+  useEffect(() => {
+    const fetchProfesores = async () => {
+      try {
+        const usuarios = await getUsuarios();
+        const soloProfesores = usuarios.filter((u: any) => u.rol === "PROFESOR");  
+        console.log("Profesores cargados:", soloProfesores);
+        setProfesores(soloProfesores); 
+      } catch (err) {
+        console.error("Error cargando profesores", err);
+      }
+    };
+    fetchProfesores();
+  }, []);
 
   const handleAddCategoria = () => {
     if(nuevaCategoria.trim() && !formData.categorias?.includes(nuevaCategoria)){
@@ -46,10 +60,15 @@ const CursoForm = ({ cursoInicial, onSubmit }: Props) => {
       setErrors({
         titulo: raw.titulo?.[0] ?? '',
         descripcion: raw.descripcion?.[0] ?? '', 
+        categorias: raw.categorias?.[0] ?? '',
+        profesor: raw.profesor?.[0] ?? ''
       });
       return;
+    }const cursoValido={
+      ...formData,
+      profesor:  formData.profesor
     }
-    onSubmit(formData);   
+    onSubmit(cursoValido);   
   };
 
   return (
@@ -65,6 +84,25 @@ const CursoForm = ({ cursoInicial, onSubmit }: Props) => {
       <textarea name="descripcion" value={formData.descripcion}
                 onChange={e=>setFormData({...formData,descripcion:e.target.value})}/>
       {errors.descripcion && <p className="error">{errors.descripcion}</p>}
+      <label>Profesor</label>
+     <select
+      name="profesor"
+      value={
+        typeof formData.profesor === "string"
+          ? formData.profesor
+          : formData.profesor?._id || ""
+      }
+      onChange={(e) =>
+        setFormData({ ...formData, profesor: e.target.value })
+      }
+    >
+      <option value="">Seleccione un profesor</option>
+      {profesores.map((p) => (
+        <option key={p._id} value={p._id}>
+          {p.nombre ?? p._id}
+        </option>
+      ))}
+    </select>
 
       <label>Categorías</label>
 

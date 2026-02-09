@@ -114,6 +114,35 @@
     background-color: #2563eb;
     border-color: #2563eb;
 }
+/* Lista de sugerencias debajo del header */
+.sugerencias-lista {
+  position: absolute;       /* se posiciona respecto al header */
+  top: 70px;                /* ajusta según la altura de tu header */
+  left: 50%;                /* centrado */
+  transform: translateX(-50%);
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 400px;             /* mismo ancho que el input */
+  max-height: 200px;        /* límite de altura */
+  overflow-y: auto;         /* scroll si hay muchas */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1000;            /* encima del resto */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.sugerencias-lista li {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.sugerencias-lista li:hover {
+  background-color: #f5f5f5;
+}
+
 
 @media (max-width: 900px) {
     .header-content { 

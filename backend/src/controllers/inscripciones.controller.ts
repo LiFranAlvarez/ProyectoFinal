@@ -34,6 +34,23 @@ class InscripcionesController{
             res.status(400).json(error);
         }
     };
+
+    async abandonarCurso( req: Request, res: Response ){
+        try {
+            const { cursoId, usuarioId } = req.body;
+            if (!cursoId || !usuarioId) {
+                return res.status(400).json({message : "Se requieren cursoId y usuarioId"})
+            }
+            const result = await InscripcionesService.abandonarCurso(cursoId, usuarioId);
+            res.status(200).json(result);
+        } catch (error) {
+            if (error instanceof HttpError) {
+                return res.status(error.status).json({message : error.message})
+            }
+            console.error(error);
+            res.status(400).json(error);
+        }
+    };
     async getUsersByCurso( req: Request, res: Response ){
         try {
             const idCurso = req.params.idCurso;
