@@ -1,6 +1,5 @@
 import Inscripciones from "../models/inscripciones";
 import Usuario from '../models/usuario.schema';
-import Curso from '../models/curso.schema';
 import HttpError from '../utils/httpError';
 
 
@@ -99,7 +98,6 @@ class InscripcionService{
                     return [];
                 }
                 const userIDs = [...new Set(inscripciones.map(i => i.usuarioId))];
-                 console.log(userIDs);
                 const alumnosInscritos = await Usuario.find({
                     _id: { $in: userIDs },
                     rol: 'ALUMNO'
@@ -132,13 +130,16 @@ class InscripcionService{
             throw new HttpError("No se pudo obtener las inscripciones del usuario", 500);
         }
     };
-    async getAll(){
-        try {
-            return await Inscripciones.find().populate('cursoId', 'titulo _id');
-        } catch (error) {
-            
-        }
+   async getAll() {
+    try {
+        return await Inscripciones.find()
+            .populate('cursoId', 'titulo') // Ya lo tenías
+            .populate('usuarioId', 'nombre email'); // <--- AGREGA ESTA LÍNEA
+    } catch (error) {
+        console.error("Error en getAll inscripciones:", error);
+        throw error;
     }
+}
     
 }
 export default new InscripcionService();    

@@ -14,7 +14,6 @@ const CrearCurso = () => {
         : curso.profesor?._id, 
       estado: "EN CURSO" as const,
     };
-    console.log("Payload para crear curso:", payload);
     await createCurso(payload);
     
 

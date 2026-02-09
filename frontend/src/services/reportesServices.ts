@@ -29,12 +29,10 @@ export const descargarReporte = async (tipo: string, formato: string) => {
             const data = await refreshRes.json();
             localStorage.setItem("token", data.accessToken);
             
-            // Reintentamos con el nuevo token
             response = await realizarPeticion(data.accessToken);
         } else {
-            // El refresh token también murió
             localStorage.clear();
-            window.location.href = "/login";
+            window.location.href = "/admin";
             return;
         }
     }

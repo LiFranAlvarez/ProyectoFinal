@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import ReporteService from '../services/reportes.sesrvice';
+import Inscripcion from '../models/inscripciones';
 
 export const descargarReporte = async (req: Request, res: Response) => {
     const { tipo, formato } = req.params;
@@ -11,8 +12,14 @@ export const descargarReporte = async (req: Request, res: Response) => {
             : 'application/pdf';
 
         if (tipo === 'inscripciones') {
-            const datos = await ReporteService.getDatosInscripciones();
-            
+            // 1. Forzamos la consulta con populate
+            // Nota: Asegúrate de que 'usuarioId' y 'cursoId' sean los nombres exactos en tu Schema
+            const datos = await Inscripcion.find()
+                .populate('UsuarioId', 'nombre email') 
+                .populate('cursoId');
+
+            console.log('REVISIÓN FINAL DE DATOS:', datos[0]); // Mira si aquí usuarioId tiene datos
+
             if (formato === 'xlsx') {
                 const cols = [
                     { header: 'Alumno', key: 'alumno' },
@@ -20,21 +27,31 @@ export const descargarReporte = async (req: Request, res: Response) => {
                     { header: 'Curso', key: 'curso' },
                     { header: 'Fecha', key: 'fecha' }
                 ];
+
                 const rows = datos.map((i: any) => ({
-                    alumno: i.usuarioId?.nombre || 'N/A',
+                    // Usamos encadenamiento opcional ?. y valores por defecto
+                    alumno: i.usuarioId?.nombre || 'No encontrado',
                     email: i.usuarioId?.email || 'N/A',
                     curso: i.cursoId?.titulo || 'N/A',
-                    fecha: i.createdAt ? new Date(i.createdAt).toLocaleDateString() : 'N/A'
+                    // Usamos fechaInscripcion que es la de tu Schema
+                    fecha: i.fechaInscripcion ? new Date(i.fechaInscripcion).toLocaleDateString() : 'N/A'
                 }));
                 buffer = await ReporteService.generarExcel(rows, cols);
             } else {
+                // PDF: Aquí el orden de las columnas debe ser exacto al header ["Alumno", "Email", "Curso", "Fecha"]
                 const rows = datos.map((i: any) => [
-                    i.usuarioId?.nombre || 'N/A',
+                    i.usuarioId?.nombre || 'No encontrado',
                     i.usuarioId?.email || 'N/A',
                     i.cursoId?.titulo || 'N/A',
-                    i.createdAt ? new Date(i.createdAt).toLocaleDateString() : 'N/A'
+                    i.fechaInscripcion ? new Date(i.fechaInscripcion).toLocaleDateString() : 'N/A'
                 ]);
-                buffer = await ReporteService.generarPdf("Reporte de Inscripciones", ["Alumno", "Email", "Curso", "Fecha"], rows);
+                
+            
+                buffer = await ReporteService.generarPdf(
+                    "Reporte de Inscripciones", 
+                    ["Alumno", "Email", "Curso", "Fecha"], 
+                    rows
+                );
             }
 
         } else if (tipo === 'cursos') {
