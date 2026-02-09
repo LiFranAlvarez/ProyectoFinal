@@ -9,6 +9,7 @@ import { Curso } from "../types/cursoType";
 import { Usuario } from "../types/usuarioType";
 import { Inscripcion } from "../types/inscripcionType";
 import "../styles/adminPage.css";
+import { descargarReporte } from "../services/reportesServices";
 
 const AdminPage = () => {
   const navigate = useNavigate();
@@ -108,6 +109,13 @@ const AdminPage = () => {
     }
   };
 
+  const handleDescarga = async (tipo: string, formato: string) => {
+      try {
+        await descargarReporte(tipo, formato);
+      } catch (err) {
+        alert("Error al descargar el archivo");
+      }
+    };
   const filteredData = useMemo(() => {
     const search = searchTerm.toLowerCase();
     return {
@@ -181,8 +189,32 @@ const AdminPage = () => {
                 <div className="stat-card"><h3>{filteredData.alumnos.length}</h3><p>Alumnos</p></div>
                 <div className="stat-card"><h3>{filteredData.profesores.length}</h3><p>Profesores</p></div>
                 <div className="stat-card"><h3>{data.inscripciones.length}</h3><p>Inscripciones</p></div>
+                <div className="download-center">
+                <h2>Centro de Reportes Oficiales</h2>
+                <div className="report-grid">
+                  
+                  <div className="report-card">
+                    <h3>Inscripciones Detalladas</h3>
+                    <p>Cruce de datos: Alumnos, sus emails y el curso al que pertenecen.</p>
+                    <div className="btn-group">
+                      <button onClick={() => handleDescarga('inscripciones', 'xlsx')}>Excel</button>
+                      <button onClick={() => handleDescarga('inscripciones', 'pdf')}>PDF</button>
+                    </div>
+                  </div>
+
+                  <div className="report-card">
+                    <h3>Catálogo y Profesores</h3>
+                    <p>Cruce de datos: Cursos activos y profesores responsables.</p>
+                    <div className="btn-group">
+                      <button onClick={() => handleDescarga('cursos', 'xlsx')}>Excel</button>
+                      <button onClick={() => handleDescarga('cursos', 'pdf')}>PDF</button>
+                    </div>
+                  </div>
+
+                </div>
               </div>
-            )}
+            </div>
+          )}
             
             {activeTab === "analisis" && (
               <div className="analisis-view">

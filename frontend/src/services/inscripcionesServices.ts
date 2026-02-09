@@ -1,11 +1,12 @@
 import { Inscripcion } from "../types/inscripcionType";
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 export const getCursosByUser = async (userId: string): Promise<Inscripcion[]> => {
   const res = await fetch(`${API_URL}/api/inscripcion/user/${userId}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
     },
   });
   if (!res.ok) throw new Error("Error al obtener cursos del usuario");
@@ -18,7 +19,8 @@ export const inscribirCurso = async (cursoId: string, userId: string): Promise<v
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            "x-api-key": API_KEY
         },
     });
 
@@ -43,7 +45,8 @@ export const abandonarCurso = async (cursoId: string, userId: string) => {
     method: "PUT",
     headers: { 
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem("token")}`
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
     },
     body: JSON.stringify({ cursoId, usuarioId: userId })
   });
@@ -56,7 +59,8 @@ export const finalizarCursoProfesor = async (cursoId: string) => {
     method: "PUT",
     headers: { 
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem("token")}`
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
     },
     body: JSON.stringify({ idCurso: cursoId })
   });
@@ -71,6 +75,7 @@ export const getAllInscripciones = async (): Promise<Inscripcion[]> => {
   const res = await fetch(`${API_URL}/api/inscripcion`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY  
     },
   });
   if (!res.ok) throw new Error("Error al obtener todas las inscripciones");

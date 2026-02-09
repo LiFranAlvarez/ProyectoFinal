@@ -1,9 +1,17 @@
 import { Curso } from "../types/cursoType";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 export const getCursos = async (): Promise<Curso[]> => {
-  const res = await fetch(`${API_URL}/api/cursos`);
+  const res = await fetch(`${API_URL}/api/cursos`,{
+    method: "GET",
+    cache: "no-store", 
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
+    },
+  });
   if (!res.ok) throw new Error("Error al obtener cursos");
   return res.json();
 };
@@ -15,6 +23,7 @@ export const getCursoById = async (idCurso: string | number): Promise<Partial<Cu
     cache: "no-store", 
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
     },
   });
   if (!res.ok) throw new Error("Error al obtener curso");
@@ -27,7 +36,8 @@ export const createCurso = async (curso: Curso): Promise<Curso> => {
     method: "POST",
     headers: { 
       "Content-Type": "application/json",
-      ...(token && { "Authorization": `Bearer ${token}` })
+      ...(token && { "Authorization": `Bearer ${token}` }),
+      "x-api-key": API_KEY
     },
     body: JSON.stringify(curso),
   });
@@ -44,6 +54,7 @@ export const updateCurso = async (idCurso: string | number, curso: Curso): Promi
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
     },
     body: JSON.stringify(curso),
   });
@@ -56,6 +67,7 @@ export const deleteCurso = async (idCurso: string | number): Promise<void> => {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
     },
   });
   if (!res.ok) throw new Error("Error al eliminar curso");
@@ -66,6 +78,7 @@ export const getCursosByProfesor = async (idCursoProfesor: string): Promise<any[
   const res = await fetch(`${API_URL}/api/cursos/profesor/${idCursoProfesor}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
     },
   });
   if (!res.ok) throw new Error("Error al obtener cursos del profesor");

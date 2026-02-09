@@ -9,27 +9,34 @@ interface JwtPayload {
 }
 
 export const verifyApiKey = (req: Request, res: Response, next: NextFunction) => {
-  const apiKey = req.header("x-api-key");
-  if (!apiKey || apiKey !== config.API_KEY) {
-    return res.status(403).json({ message: "API key inválida o no proporcionada" });
-  }
-  next();
+    const apiKeyHeader = req.header("x-api-key");
+    const claveEsperada = process.env.API_KEY;
+
+    if (!apiKeyHeader || apiKeyHeader !== claveEsperada) {
+        return res.status(403).send("API Key Inválida");
+    }
+    next();
 };
 
-export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const authHeader = req.header("Authorization");
-    const token = authHeader?.replace(/Bearer\s?/i, "");
-    if (!token) return res.status(401).json({ message: "No se proporcionó token" });
 
-    const decoded = jwt.verify(token, config.SECRET as string) as unknown as JwtPayload;
+export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization; 
+  if (!authHeader) return res.status(401).json({ message: "No se proporcionó token" });
+  const parts = authHeader.split(' ');
+  if (parts.length !== 2 || parts[0] !== 'Bearer') {
+    return res.status(401).json({ message: "Formato de token inválido (se espera Bearer <token>)" });
+  }
+
+  const token = parts[1];
+
+  try {
+    const decoded = jwt.verify(token, config.SECRET as string) as any;
     (req as any).user = { id: decoded.id, rol: decoded.rol };
     next();
   } catch (error) {
     return res.status(401).json({ message: "Token inválido o expirado" });
   }
 };
-
 export const isAdmin = async ( req : Request, res: Response, next: NextFunction ) => {
     try {
         const user = (req as any).user;
@@ -101,7 +108,7 @@ export const refreshTokenController = (req: Request, res: Response) => {
     const newAccessToken = jwt.sign(
       { id: payload.id },
       config.SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "5h" }
     );
     return res.json({ accessToken: newAccessToken });
   } catch (error) {

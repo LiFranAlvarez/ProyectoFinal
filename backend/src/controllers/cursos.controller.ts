@@ -8,6 +8,7 @@ import InscripcionesService from '../services/inscripciones.service';
 class CursosController{
     async listCursos(req: Request, res:Response){
         try {
+            
             const result = await CursosService.getAll();
             if (!result) {
                 return res.status(200).json({message : 'No hay cursos cargados'});

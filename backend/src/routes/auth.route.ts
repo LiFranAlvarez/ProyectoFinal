@@ -1,9 +1,9 @@
-import { Router } from "express";
-import signInController from "../controllers/auth.controller";
-import { verifyApiKey } from "../middlewares/authToken";
+import { Router } from 'express';
+import { signInController, refreshTokenController } from '../controllers/auth.controller';
 
-const authRouter = Router();
+const router = Router();
 
-authRouter.post('/signin',verifyApiKey, signInController);
+router.post('/signin', signInController);
+router.post('/refresh', refreshTokenController); // Nuevo endpoint
 
-export default authRouter;
+export default router;
