@@ -10,6 +10,7 @@ const CursoPage = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+      console.log("Curso ID cargando:", idCurso);
         if (!idCurso) return;
         
 

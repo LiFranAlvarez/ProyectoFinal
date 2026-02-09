@@ -32,6 +32,7 @@ export const inscribirCurso = async (cursoId: string, userId: string): Promise<v
             const errorData = await res.json(); 
             errorMessage = errorData.message || errorData.error || errorMessage;
         } catch (error) {
+            console.log(error)
             errorMessage = `El servidor devolvió un error ${res.status}.`;
         }
         

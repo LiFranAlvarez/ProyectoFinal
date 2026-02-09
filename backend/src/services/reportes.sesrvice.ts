@@ -6,14 +6,14 @@ import PDFDocument from 'pdfkit-table';
 class ReporteService {
   async getDatosInscripciones() {
     return await Inscripcion.find()
-      .populate({path:'usuarioId', select:'nombre email'})
-      .populate({path:'cursoId', select:"titulo fechaInicio"});
-      
+      .populate('usuarioId', 'nombre email')
+      .populate('cursoId');
   }
 
   async getDatosCursos() {
     return await Curso.find().populate('profesor', 'nombre');
   }
+
   async generarExcel(datos: any[], columnas: any[]) {
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Reporte');

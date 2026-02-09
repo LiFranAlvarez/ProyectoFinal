@@ -32,6 +32,7 @@ const CursoForm = ({ cursoInicial, onSubmit }: Props) => {
       try {
         const usuarios = await getUsuarios();
         const soloProfesores = usuarios.filter((u: any) => u.rol === "PROFESOR");  
+        console.log("Profesores cargados:", soloProfesores);
         setProfesores(soloProfesores); 
       } catch (err) {
         console.error("Error cargando profesores", err);

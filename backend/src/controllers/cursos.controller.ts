@@ -44,6 +44,7 @@ class CursosController{
     async createCurso(req: Request, res: Response) {
         try {
             const data = req.body;
+            console.log(data)
             const profesorId = typeof data.profesor === "object" && data.profesor.$oid 
             ? data.profesor.$oid 
             : data.profesor;
@@ -51,7 +52,9 @@ class CursosController{
             if (!mongoose.Types.ObjectId.isValid(profesorId)) {
             throw new HttpError("El id del profesor no es válido (CursoController.createCurso)", 400);
             }
+            console.log("Profesor id recibido", profesorId)
             const profesor = await userService.getOneUser(profesorId);
+            console.log("Profesor encontrado:", profesor);
 
             if (!profesor || profesor.rol !== "PROFESOR") {
             throw new HttpError("Al crear un curso se le debe asignar un usuario con rol: PROFESOR", 400);

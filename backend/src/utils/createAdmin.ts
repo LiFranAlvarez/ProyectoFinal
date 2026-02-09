@@ -14,6 +14,7 @@ const createAdmin = async () => {
                 rol : 'ADMIN'
             }
         );
+        console.log('create Admin');
         
     } catch (error) {
         
