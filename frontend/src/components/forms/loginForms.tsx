@@ -47,32 +47,28 @@ const LoginForm = () => {
       setIsLoading(true);
 
       const response = await login(formData);
-      
-      // --- CAMBIO CLAVE AQUÍ ---
-      // Tu backend devuelve 'accessToken', no 'token'
+
       const token = response.accessToken; 
       
       if (!token) throw new Error("Token no recibido del servidor");
 
       const decoded = decodeJwt(token);
       const role = decoded?.rol;
-      const userId = decoded?.id; // Tu backend usa 'id', no '_id' en el token
+      const userId = decoded?.id;
 
-      // Guardar en el contexto y storage
       auth?.login(token);
       if (userId) localStorage.setItem('userId', String(userId));
       
       setLoginSuccess(true);
 
-      // Redirección basada en roles corregida
       setTimeout(() => {
         const r = role?.toUpperCase();
         if (r === "ALUMNO") {
-          navigate("/dashboard/alumno");
+          navigate("/home");
         } else if (r === "PROFESOR") {
-          navigate("/dashboard/maestro");
+          navigate("/home");
         } else if (r === "ADMIN") {
-          navigate("/admin"); // O la ruta que definiste para tu AdminPage
+          navigate("/admin"); 
         } else {
           navigate("/");
         }

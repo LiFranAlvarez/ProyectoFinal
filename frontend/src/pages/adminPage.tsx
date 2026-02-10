@@ -42,8 +42,6 @@ const AdminPage = () => {
     fetchData();
   }, []);
 
-  // --- HANDLERS ---
-
   const deleteCursoHandler = async (_id: string) => {
     if (window.confirm("¿Confirma que desea eliminar este curso?")) {
       try { 
@@ -88,13 +86,11 @@ const AdminPage = () => {
 
       if (rolFinal === "ALUMNO" || rolFinal === "PROFESOR" || rolFinal === "ADMIN") {
         try {
-          // Llamada al servicio con tu backend corregido (solo envía el rol)
           await updateUsuario(usuario._id, { rol: rolFinal });
           
           setData(prev => ({
             ...prev,
             usuarios: prev.usuarios.map(u => 
-              // Usamos 'as Usuario' para que TS acepte la actualización del estado
               u._id === usuario._id ? ({ ...u, rol: rolFinal } as Usuario) : u
             )
           }));
@@ -124,8 +120,6 @@ const AdminPage = () => {
       profesores: data.usuarios.filter(u => u.rol === "PROFESOR" && u.nombre.toLowerCase().includes(search))
     };
   }, [data, searchTerm]);
-
-  // --- COLUMNAS ---
 
   const cursoColumns = [
     { header: "Título", render: (c: Curso) => <strong>{c.titulo}</strong> },

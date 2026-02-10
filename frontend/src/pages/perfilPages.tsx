@@ -13,11 +13,11 @@ const PerfilUsuario = () => {
     nombre: "",
     email: "",
     rol: "ALUMNO",
-    foto: "" // nuevo campo para foto de perfil
+    foto: ""
   });
 
   const [editando, setEditando] = useState(false);
-  const [mensaje, setMensaje] = useState<string>(""); // feedback visual
+  const [mensaje, setMensaje] = useState<string>(""); 
   const [cursosTotales, setCursosTotales] = useState<number>(0);
   const [cursosCompletados, setCursosCompletados] = useState<number>(0);
   const [cursosEnCurso, setCursosEnCurso] = useState<number>(0);
@@ -70,7 +70,6 @@ const PerfilUsuario = () => {
 
   const handleGuardar = async () => {
     try {
-      // Validaciones simples
       if (!usuario.nombre.trim()) {
         setMensaje("El nombre no puede estar vacío");
         return;
@@ -107,7 +106,6 @@ const PerfilUsuario = () => {
       <div className="perfil-card">
         <h2>Información personal:</h2>
 
-        {/* Foto de perfil */}
         <div className="foto-perfil">
           {usuario.foto ? (
             <img src={usuario.foto} alt="Foto de perfil" />

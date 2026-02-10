@@ -26,14 +26,11 @@ class Server {
     middlewares(){
 
 
-        // Logger HTTP
         this.app.use(morgan('dev'));
-        // Log simple request info for debugging
         this.app.use((req, _res, next) => {
             console.log('REQ:', req.method, req.originalUrl);
             next();
         });
-        //cors
         this.app.use( cors({
             origin: true, 
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -41,7 +38,7 @@ class Server {
             allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key']}
         ));
         this.app.use(express.json({limit: '150mb'}));        
-        //this.app.use(verifyApiKey)
+        this.app.use(verifyApiKey)
     }
     routes(){
         

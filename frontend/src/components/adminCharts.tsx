@@ -6,7 +6,6 @@ interface Props {
 }
 
 const AdminCharts = ({ cursos, inscripciones }: Props) => {
-  // 1. Preparar datos para gráfico de barras: Alumnos por curso
   const dataCursos = cursos.map(c => ({
     nombre: c.titulo.length > 15 ? c.titulo.substring(0, 12) + "..." : c.titulo,
     alumnos: inscripciones.filter(i => (i.cursoId?._id || i.cursoId) === c._id).length
@@ -16,7 +15,6 @@ const AdminCharts = ({ cursos, inscripciones }: Props) => {
 
   return (
     <div className="charts-container">
-      {/* Gráfico de Barras */}
       <div className="chart-box">
         <h3>Inscripciones por Curso</h3>
         <ResponsiveContainer width="100%" height={300}>
@@ -30,7 +28,6 @@ const AdminCharts = ({ cursos, inscripciones }: Props) => {
         </ResponsiveContainer>
       </div>
 
-      {/* Gráfico de Torta (Opcional) */}
       <div className="chart-box">
         <h3>Popularidad Relativa</h3>
         <ResponsiveContainer width="100%" height={300}>

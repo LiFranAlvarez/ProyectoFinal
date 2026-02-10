@@ -4,6 +4,6 @@ import { signInController, refreshTokenController } from '../controllers/auth.co
 const router = Router();
 
 router.post('/signin', signInController);
-router.post('/refresh', refreshTokenController); // Nuevo endpoint
+router.post('/refresh', refreshTokenController); 
 
 export default router;

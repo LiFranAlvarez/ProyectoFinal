@@ -132,7 +132,6 @@ class CursosController{
                 return res.status(400).json({message : "Se requiere idCurso"});
             }
 
-            // Verificar que el curso existe y que el usuario es el profesor
             const curso = await CursosService.getById(idCurso);
             if (!curso) {
                 return res.status(404).json({message : "Curso no encontrado"});
@@ -144,10 +143,8 @@ class CursosController{
                 return res.status(403).json({message : "No tienes permiso para finalizar este curso"});
             }
 
-            // Actualizar el estado del curso a COMPLETADO
             const cursoActualizado = await CursosService.updateOne(idCurso, { estado:'COMPLETADO' } as any);
 
-            // Marcar todas las inscripciones EN_PROCESO como TERMINADA
             await InscripcionesService.finalizarCurso(idCurso);
 
             res.status(200).json({ 

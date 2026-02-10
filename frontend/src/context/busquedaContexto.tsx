@@ -3,7 +3,6 @@ import { CursoFiltro } from '../types/filtrosCursosType';
 
 type BusquedaContextType = {
   filtro: CursoFiltro;
-  // Usamos Partial para poder actualizar solo una parte del filtro si fuera necesario
   setFiltro: (val: CursoFiltro) => void;
   resetFiltro: () => void;
 };
@@ -11,10 +10,7 @@ type BusquedaContextType = {
 const BusquedaContext = createContext<BusquedaContextType | undefined>(undefined);
 
 export const BusquedaProvider = ({ children }: { children: React.ReactNode }) => {
-  // Inicializamos con un objeto que contenga texto vacío para evitar errores de undefined
   const [filtro, setFiltro] = useState<CursoFiltro>({ texto: "" });
-
-  // useCallback evita que la función se recree innecesariamente, mejorando el rendimiento
   const resetFiltro = useCallback(() => {
     setFiltro({ texto: "" });
   }, []);

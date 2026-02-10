@@ -30,7 +30,6 @@ class InscripcionService{
                 );
             }
 
-            // Si no existe, crear una nueva inscripción
             return await Inscripciones.create({
                 cursoId: idCurso,
                 usuarioId: idUser

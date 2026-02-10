@@ -62,7 +62,6 @@ const CursoDetalle: React.FC<Props> = ({ curso: cursoInicial }) => {
 
   const handleActualizarCurso = async () => {
     try {
-      // Usando updateCurso del servicio
       await updateCurso(curso._id!, curso);
       alert('Curso actualizado exitosamente');
       setIsEditing(false);
@@ -76,7 +75,6 @@ const CursoDetalle: React.FC<Props> = ({ curso: cursoInicial }) => {
       if (!formClase.titulo.trim()) return alert('El título es requerido');
 
       const payload = { ...formClase, cursoId: curso._id };
-      // Usando createClase del servicio
       const nuevaClase = await createClase(payload as any);
       
       setCurso({...curso, clases: [...(curso.clases || []), nuevaClase]});
@@ -93,7 +91,6 @@ const CursoDetalle: React.FC<Props> = ({ curso: cursoInicial }) => {
       if (!formMaterial.titulo.trim() || !formMaterial.enlace.trim()) return alert('Requeridos');
 
       const payload = { ...formMaterial, cursoId: curso._id };
-      // Usando createMaterial del servicio
       const nuevoMaterial = await createMaterial(payload as any);
 
       setCurso({...curso, materiales: [...(curso.materiales || []), nuevoMaterial]});

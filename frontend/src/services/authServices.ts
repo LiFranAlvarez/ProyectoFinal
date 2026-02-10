@@ -20,7 +20,6 @@ export const register = async (data: { nombre: string; email: string; password: 
   if (!res.ok) throw new Error("Error en registro");
   return res.json();
 };
-// Función para renovar el token
 const renovarToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
     if (!refreshToken) return null;
@@ -39,11 +38,9 @@ const renovarToken = async () => {
     return null;
 };
 
-// Función de fetch inteligente
 export const fetchConAutoRefresh = async (url: string, options: any = {}) => {
     let token = localStorage.getItem("token");
     
-    // Inyectar headers comunes
     options.headers = {
         ...options.headers,
         "Authorization": `Bearer ${token}`,
@@ -52,17 +49,14 @@ export const fetchConAutoRefresh = async (url: string, options: any = {}) => {
 
     let response = await fetch(url, options);
 
-    // Si el token expiró (401 o 403)
     if (response.status === 401 || response.status === 403) {
         console.log("Token expirado, intentando renovar...");
         const nuevoToken = await renovarToken();
         
         if (nuevoToken) {
-            // Reintentar la petición con el nuevo token
             options.headers["Authorization"] = `Bearer ${nuevoToken}`;
             response = await fetch(url, options);
         } else {
-            // Si no se pudo renovar, cerrar sesión
             localStorage.clear();
             window.location.href = "/login";
         }
