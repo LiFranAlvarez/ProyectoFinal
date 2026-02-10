@@ -1,36 +1,42 @@
-import { NextFunction, Request, Response } from "express";
-import jwt from 'jsonwebtoken';
-import config from '../config/config';
-import Usuario from '../models/usuario.schema';
-import CursosService from '../services/curso.service';
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import config from "../config/config";
+import CursosService from "../services/curso.service";
 
 interface JwtPayload {
-    id: string;
-    rol : string;
+  id: string;
+  rol: string;
 }
 
-export const verifyToken = async ( req : Request, res: Response, next: NextFunction ) => {
-    try {
-        const authHeader = (req.header('authorization') || req.header('Authorization') || req.header('token')) as string | undefined;
-        const token = authHeader ? authHeader.replace(/Bearer\s?/i, '') : undefined;
-        if (!token) {
-            return res.status(401).json({msg : 'No se proporciono token'})
-        }
-        const decoded = jwt.verify(token, config.SECRET) as JwtPayload;
-        const idUser = decoded.id;
-        const user = await Usuario.findById(idUser, {passwordHass : 0});
-        if (!user) {
-            return res.status(404).json({message : 'User not found'})
-        }
-        (req as any).user = { id: idUser, rol: decoded.rol };
-        console.log('Token verificado');
-        next();
-    } catch (error) {
-        console.error("Error al verificar token:", error);
-        return res.status(401).json({ message: "Token inválido o expirado" });
+export const verifyApiKey = (req: Request, res: Response, next: NextFunction) => {
+    const apiKeyHeader = req.header("x-api-key");
+    const claveEsperada = process.env.API_KEY;
+
+    if (!apiKeyHeader || apiKeyHeader !== claveEsperada) {
+        return res.status(403).send("API Key Inválida");
     }
-}
+    next();
+};
 
+
+export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization; 
+  if (!authHeader) return res.status(401).json({ message: "No se proporcionó token" });
+  const parts = authHeader.split(' ');
+  if (parts.length !== 2 || parts[0] !== 'Bearer') {
+    return res.status(401).json({ message: "Formato de token inválido (se espera Bearer <token>)" });
+  }
+
+  const token = parts[1];
+
+  try {
+    const decoded = jwt.verify(token, config.SECRET as string) as any;
+    (req as any).user = { id: decoded.id, rol: decoded.rol };
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: "Token inválido o expirado" });
+  }
+};
 export const isAdmin = async ( req : Request, res: Response, next: NextFunction ) => {
     try {
         const user = (req as any).user;
@@ -92,3 +98,20 @@ export const canEditCurso = async ( req: Request, res: Response, next: NextFunct
         return res.status(500).json({ message: 'Error interno' });
     }
 }
+
+export const refreshTokenController = (req: Request, res: Response) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) return res.status(401).json({ message: "No hay refresh token" });
+
+  try {
+    const payload = jwt.verify(refreshToken, config.REFRESH_SECRET) as any;
+    const newAccessToken = jwt.sign(
+      { id: payload.id },
+      config.SECRET,
+      { expiresIn: "5h" }
+    );
+    return res.json({ accessToken: newAccessToken });
+  } catch (error) {
+    return res.status(403).json({ message: "Refresh token inválido o expirado" });
+  }
+};

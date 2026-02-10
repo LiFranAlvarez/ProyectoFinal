@@ -3,20 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { loginSchema } from "../../utils/validaciones/validacionesLogin";
 import { login } from '../../services/authServices';
 import { AuthContext } from '../../context/authContexto';
-
+import "../../styles/forms.css";
 
 const decodeJwt = (token: string) => {
   try {
     const payload = token.split('.')[1];
     const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
-    return JSON.parse(decoded) as { rol?: string; _id?: string };
-    console.log(decoded)
+    return JSON.parse(decoded) as { rol?: string; id?: string };
   } catch {
     return null;
   }
 };
-import "../../styles/forms.css";
-
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -36,7 +33,6 @@ const LoginForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validación con Zod
     const result = loginSchema.safeParse(formData);
     if (!result.success) {
       const rawErrors = result.error.flatten().fieldErrors;
@@ -51,65 +47,53 @@ const LoginForm = () => {
       setIsLoading(true);
 
       const response = await login(formData);
-      const resp = response as { token?: string; message?: string };
-      const token = resp.token;
-      if (!token) throw new Error("Token no recibido");
+
+      const token = response.accessToken; 
+      
+      if (!token) throw new Error("Token no recibido del servidor");
 
       const decoded = decodeJwt(token);
       const role = decoded?.rol;
-      const userId = decoded?._id;
+      const userId = decoded?.id;
 
       auth?.login(token);
       if (userId) localStorage.setItem('userId', String(userId));
+      
       setLoginSuccess(true);
 
       setTimeout(() => {
-        if (role && (role.includes("alum") || role === "alumno")) {
-          navigate("/dashboard/alumno");
-        } else if (role && (role.includes("prof") || role === "profesor" || role === "maestro")) {
-          navigate("/dashboard/maestro");
-        } else if (role && role.includes("admin")) {
-          navigate("/dashboard/admin");
+        const r = role?.toUpperCase();
+        if (r === "ALUMNO") {
+          navigate("/home");
+        } else if (r === "PROFESOR") {
+          navigate("/home");
+        } else if (r === "ADMIN") {
+          navigate("/admin"); 
         } else {
           navigate("/");
         }
       }, 800);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setServerError(err.message || "Error al iniciar sesión");
-      } else {
-        setServerError("Error desconocido");
-      }
+    } catch (err: any) {
+      setServerError(err.message || "Error al iniciar sesión");
     } finally {
       setIsLoading(false);
     }
   };
 
-
-   return (
+  return (
     <form onSubmit={handleSubmit} className="forms">
       <h2>Iniciar sesión</h2>
 
-      <label>Ingrese su email:</label>
-      <input
-        name="email"
-        type="email"
-        value={formData.email}
-        onChange={handleChange}
-      />
-      {fieldErrors.email && <p style={{ color: "red" }}>{fieldErrors.email}</p>}
+      <label>Email</label>
+      <input name="email" type="email" value={formData.email} onChange={handleChange} />
+      {fieldErrors.email && <p className="error-text">{fieldErrors.email}</p>}
 
-      <label>Ingrese su contraseña:</label>
-      <input
-        name="password"
-        type="password"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      {fieldErrors.password && <p style={{ color: "red" }}>{fieldErrors.password}</p>}
+      <label>Contraseña</label>
+      <input name="password" type="password" value={formData.password} onChange={handleChange} />
+      {fieldErrors.password && <p className="error-text">{fieldErrors.password}</p>}
 
-      {serverError && <p style={{ color: "red" }}>{serverError}</p>}
-      {loginSuccess && <p style={{ color: "green" }}>Inicio de sesión correcto</p>}
+      {serverError && <p className="error-text">{serverError}</p>}
+      {loginSuccess && <p className="success-text">¡Inicio de sesión correcto!</p>}
 
       <button type="submit" className="boton-formulario" disabled={isLoading}>
         {isLoading ? "Ingresando..." : "Ingresar"}
@@ -119,4 +103,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-

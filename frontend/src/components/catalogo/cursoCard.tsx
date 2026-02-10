@@ -8,6 +8,7 @@ const CursoCard = ({ curso }: { curso: Curso }) => (
     <h3>{curso.titulo}</h3>
     <p><strong>Descripción:</strong>{curso.descripcion ?? "Sin descripción"}</p>
     <p><strong>Categoría:</strong> {curso.categorias?.join(", ") ?? "Sin categoría"}</p>
+    <p><strong>Profesor:</strong> {typeof curso.profesor === 'object' && curso.profesor ? curso.profesor.nombre : "Buscando profesor"}</p>
     <Link to={`/cursos/${curso._id}`} className='curso-button'>
       <button>Ver más</button>
     </Link>

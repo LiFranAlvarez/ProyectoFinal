@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getMateriales, getMaterialById,createMaterial,updateMaterial,deleteMaterial,} from "../controllers/material.controller";
 
+
 const router = Router();
 
 router.get("/", getMateriales);

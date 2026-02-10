@@ -2,11 +2,13 @@
 import { Usuario } from "../types/usuarioType";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 export const getUsuarios = async (): Promise<Usuario[]> => {
   const res = await fetch(`${API_URL}/api/usuarios`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
     },
   });
   if (!res.ok) throw new Error("Error al obtener usuarios");
@@ -17,6 +19,7 @@ export const getUsuarioById = async (id: string | number): Promise<Usuario> => {
   const res = await fetch(`${API_URL}/api/usuario/${id}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
     },
   });
   if (!res.ok) throw new Error("Error al obtener usuario");
@@ -28,7 +31,8 @@ export const updateUsuario = async (id: string, payload: any) => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
     },
     body: JSON.stringify(payload),
   });
@@ -41,6 +45,7 @@ export const deleteUsuario = async (id: string | number): Promise<void> => {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
     },
   });
   if (!res.ok) throw new Error("Error al eliminar usuario");

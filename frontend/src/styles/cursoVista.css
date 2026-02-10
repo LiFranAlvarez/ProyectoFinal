@@ -18,7 +18,7 @@
     margin-top: 10px;
 }
 
-.alumno-acciones, .btn-group-profesor, .btn-group-acciones {
+.alumno-acciones, .btn-group-profesor, .btn-group-acciones, .profesor-acciones {
     display: flex;
     justify-content: center;
     gap: 10px;
@@ -26,14 +26,82 @@
     margin-bottom: 20px;
 }
 
-.btn-inscripcion, .btn-editar-curso, .btn-reinscribir {
+.btn-inscripcion, .btn-editar-curso, .btn-reinscribir, .btn-finalizar-curso {
     padding: 10px 20px;
     background-color: #1d4ed8; 
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.6s,;
+    transition: background-color 0.6s;
+}
+
+.btn-inscripcion:hover, .btn-editar-curso:hover, .btn-reinscribir:hover {
+    background-color: #1e40af;
+}
+
+.btn-abandonar {
+    padding: 8px 16px;
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-abandonar:hover {
+    background-color: #b91c1c;
+}
+
+.btn-eliminar-clase,
+.btn-eliminar-material {
+    padding: 6px 12px;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.btn-eliminar-clase:hover,
+.btn-eliminar-material:hover {
+    background-color: #dc2626;
+}
+
+.btn-abandonar:hover {
+    background-color: #b91c1c;
+}
+
+.btn-finalizar {
+    padding: 8px 16px;
+    background-color: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-finalizar:hover {
+    background-color: #15803d;
+}
+
+.btn-finalizar-curso {
+    padding: 10px 20px;
+    background-color: #059669;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 600;
+}
+
+.btn-finalizar-curso:hover {
+    background-color: #047857;
 }
 
 .btn-cancelar-edicion {
@@ -106,4 +174,197 @@
 
 .material-titulo {
     font-weight: 600;
+}
+
+.alumno-opciones {
+    display: flex;
+    gap: 10px;
+}
+
+.estado-actual {
+    padding: 10px 15px;
+    background-color: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    border-radius: 4px;
+    color: #78350f;
+}
+
+/* CATEGORÍAS/ETIQUETAS */
+.curso-categorias {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.categorias-label {
+    margin-bottom: 8px;
+    color: #4a5568;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #e6ecff;
+    border: 1px solid #1d4ed8;
+    color: #1d4ed8;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.chip b {
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 2px;
+}
+
+.chip b:hover {
+    color: #dc2626;
+}
+
+.agregar-categoria {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.agregar-categoria input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.agregar-categoria button {
+    padding: 8px 16px;
+    background-color: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.agregar-categoria button:hover {
+    background-color: #15803d;
+}
+
+/* INPUTS EDITABLES */
+.input-editable-titulo {
+    width: 100%;
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding: 10px;
+    border: 2px solid #1d4ed8;
+    border-radius: 4px;
+    color: #1a202c;
+    margin-bottom: 10px;
+}
+
+.input-editable-descripcion {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    border: 2px solid #1d4ed8;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    margin-bottom: 10px;
+}
+
+/* BOTONES */
+.btn-guardar-edicion {
+    background-color: #16a34a;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-guardar-edicion:hover {
+    background-color: #15803d;
+}
+
+.btn-agregar {
+    background-color: #1d4ed8;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.btn-agregar:hover {
+    background-color: #1e40af;
+}
+
+/* FORMULARIOS INLINE */
+.form-agregar-clase,
+.form-agregar-material {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9fafb;
+    border-radius: 6px;
+}
+
+.form-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-inline input,
+.form-inline select {
+    padding: 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.form-inline input:focus,
+.form-inline select:focus {
+    outline: none;
+    border-color: #1d4ed8;
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+}
+
+.form-inline button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.form-inline .btn-guardar {
+    background-color: #16a34a;
+    color: white;
+}
+
+.form-inline .btn-guardar:hover {
+    background-color: #15803d;
+}
+
+.form-inline .btn-cancelar {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.form-inline .btn-cancelar:hover {
+    background-color: #d1d5db;
 }

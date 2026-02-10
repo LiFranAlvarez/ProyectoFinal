@@ -6,16 +6,34 @@ import HttpError from '../utils/httpError';
 
 class InscripcionService{
     async createOne( idCurso: string, idUser: string ){
-        const existing = await Inscripciones.findOne({ cursoId: idCurso, usuarioId: idUser });
-        if (existing) {
+        const inscripcionActiva = await Inscripciones.findOne({ 
+            cursoId: idCurso, 
+            usuarioId: idUser,
+            estadoInscripcion: 'EN_PROCESO'
+        });
+        
+        if (inscripcionActiva) {
             throw new HttpError("Ya estás inscripto en este curso.", 409); 
         }
+        const inscripcionAbandonada = await Inscripciones.findOne({
+            cursoId: idCurso,
+            usuarioId: idUser,
+            estadoInscripcion: 'ABANDONADA'
+        });
 
         try {
+            if (inscripcionAbandonada) {
+                return await Inscripciones.findByIdAndUpdate(
+                    inscripcionAbandonada._id,
+                    { estadoInscripcion: 'EN_PROCESO' },
+                    { new: true }
+                );
+            }
+
             return await Inscripciones.create({
                 cursoId: idCurso,
                 usuarioId: idUser
-            });;
+            });
         } catch (error: any) {
             
             console.error("Error detallado de Mongoose en createOne:", error); 
@@ -30,12 +48,43 @@ class InscripcionService{
 
     async cancelOne( idInsc: string ){
         try {
-            const result = Inscripciones.findByIdAndUpdate(idInsc, {estadoInscripcion : 'CANCELADA'},{
+            const result = await Inscripciones.findByIdAndUpdate(idInsc, {estadoInscripcion : 'ABANDONADA'},{
                 new : true
             })
             return result;
         } catch (error) {
             throw new HttpError("No se pudo cancelar inscripcion", 500);
+        }
+    };
+
+    async abandonarCurso( cursoId: string, usuarioId: string ){
+        try {
+            const inscripcion = await Inscripciones.findOneAndUpdate(
+                { cursoId: cursoId, usuarioId: usuarioId },
+                { estadoInscripcion: 'ABANDONADA' },
+                { new: true }
+            );
+            if (!inscripcion) {
+                throw new HttpError("No se encontró inscripción", 404);
+            }
+            return inscripcion;
+        } catch (error) {
+            if (error instanceof HttpError) {
+                throw error;
+            }
+            throw new HttpError("No se pudo abandonar el curso", 500);
+        }
+    };
+
+    async finalizarCurso( cursoId: string ){
+        try {
+            const result = await Inscripciones.updateMany(
+                { cursoId: cursoId, estadoInscripcion: 'EN_PROCESO' },
+                { estadoInscripcion: 'TERMINADA' }
+            );
+            return result;
+        } catch (error) {
+            throw new HttpError("No se pudieron finalizar las inscripciones del curso", 500);
         }
     };
 
@@ -68,7 +117,11 @@ class InscripcionService{
             const inscripcionesCompletas = await Inscripciones.find({ usuarioId: idUser })
                 .populate({
                     path: 'cursoId', 
-                    select: 'titulo estado profesor' 
+                    select: 'titulo descripcion categorias estado profesor',
+                    populate: {
+                        path: 'profesor',
+                        select: 'nombre'
+                    }
                 })
                 .select('cursoId estadoInscripcion'); 
             
@@ -80,7 +133,7 @@ class InscripcionService{
     };
     async getAll(){
         try {
-            return await Inscripciones.find();
+            return await Inscripciones.find().populate('cursoId', 'titulo _id');
         } catch (error) {
             
         }

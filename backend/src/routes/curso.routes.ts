@@ -3,11 +3,12 @@ import CursosController from "../controllers/cursos.controller";
 import * as auth from "../middlewares/authToken";
 const cursoRouter = Router();
 
-cursoRouter.get('/cursos' ,CursosController.listCursos); // array de cursos 
-cursoRouter.get('/cursos/:idCurso',CursosController.getCursoById)
-cursoRouter.get('/cursos/profesor/:idProfesor', auth.verifyToken, CursosController.getCursosByProfesor);
-cursoRouter.post('/cursos',  CursosController.createCurso); // crear un curso
-cursoRouter.put('/cursos/:idCurso',  CursosController.updateCurso); // edita un crso hay que pasarle el curso completo
-cursoRouter.delete('/cursos/:idCurso',  CursosController.deleteCurso); // elimina un curso
+cursoRouter.get('/' ,CursosController.listCursos);
+cursoRouter.get('/:idCurso',CursosController.getCursoById)
+cursoRouter.get('/profesor/:idProfesor', auth.verifyToken, CursosController.getCursosByProfesor);
+cursoRouter.post('/', auth.verifyToken, CursosController.createCurso);
+cursoRouter.put('/:idCurso', auth.verifyToken, CursosController.updateCurso); 
+cursoRouter.put('/finalizar-curso', auth.verifyToken, CursosController.finalizarCurso); 
+cursoRouter.delete('/:idCurso', auth.verifyToken, CursosController.deleteCurso); 
 
 export default cursoRouter;

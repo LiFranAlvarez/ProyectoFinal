@@ -1,11 +1,12 @@
 import { Inscripcion } from "../types/inscripcionType";
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 export const getCursosByUser = async (userId: string): Promise<Inscripcion[]> => {
   const res = await fetch(`${API_URL}/api/inscripcion/user/${userId}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
     },
   });
   if (!res.ok) throw new Error("Error al obtener cursos del usuario");
@@ -18,7 +19,8 @@ export const inscribirCurso = async (cursoId: string, userId: string): Promise<v
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            "x-api-key": API_KEY
         },
     });
 
@@ -39,23 +41,45 @@ export const inscribirCurso = async (cursoId: string, userId: string): Promise<v
 };
 
 export const abandonarCurso = async (cursoId: string, userId: string) => {
-  const res = await fetch(`${API_URL}/api/inscripcion/cancel/:idInsc`, {
+  const res = await fetch(`${API_URL}/api/inscripcion/abandonar`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ cursoId, userId })
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
+    },
+    body: JSON.stringify({ cursoId, usuarioId: userId })
   });
   if (!res.ok) throw new Error("Error al abandonar curso");
   return res.json();
 };
 
-export const completarCurso = async (cursoId: string, userId: string) => {
-  const res = await fetch(`${API_URL}/api/inscripcion/completar`, {
+export const finalizarCursoProfesor = async (cursoId: string) => {
+  const res = await fetch(`${API_URL}/api/cursos/finalizar-curso`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ cursoId, userId })
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY
+    },
+    body: JSON.stringify({ idCurso: cursoId })
   });
-  if (!res.ok) throw new Error("Error al completar curso");
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Error al finalizar el curso");
+  }
   return res.json();
 };
 
-export default {getCursosByUser,inscribirCurso,abandonarCurso,completarCurso};
+export const getAllInscripciones = async (): Promise<Inscripcion[]> => {
+  const res = await fetch(`${API_URL}/api/inscripcion`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "x-api-key": API_KEY  
+    },
+  });
+  if (!res.ok) throw new Error("Error al obtener todas las inscripciones");
+  return res.json();
+};
+
+export default {getCursosByUser,inscribirCurso,abandonarCurso,finalizarCursoProfesor,getAllInscripciones};

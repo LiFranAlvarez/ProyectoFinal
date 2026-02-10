@@ -4,7 +4,6 @@ export const validate = (schema: any, source: 'body' | 'params' | 'query' = 'bod
   return (req: Request, res: Response, next: NextFunction) => {
     if (!schema) return next();
     try {
-      // Zod
       if (schema && typeof schema.parse === 'function') {
         schema.parse(req[source]);
         return next();

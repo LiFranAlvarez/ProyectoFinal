@@ -3,10 +3,12 @@ import HttpError from '../utils/httpError';
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import userService from '../services/user.service';
+import InscripcionesService from '../services/inscripciones.service';
 
 class CursosController{
     async listCursos(req: Request, res:Response){
         try {
+            
             const result = await CursosService.getAll();
             if (!result) {
                 return res.status(200).json({message : 'No hay cursos cargados'});
@@ -50,8 +52,9 @@ class CursosController{
             if (!mongoose.Types.ObjectId.isValid(profesorId)) {
             throw new HttpError("El id del profesor no es válido (CursoController.createCurso)", 400);
             }
-
+            console.log("Profesor id recibido", profesorId)
             const profesor = await userService.getOneUser(profesorId);
+            console.log("Profesor encontrado:", profesor);
 
             if (!profesor || profesor.rol !== "PROFESOR") {
             throw new HttpError("Al crear un curso se le debe asignar un usuario con rol: PROFESOR", 400);
@@ -117,6 +120,43 @@ class CursosController{
             }
             console.error(error);
             res.status(400).json(error);
+        }
+    }
+
+    async finalizarCurso(req: Request, res: Response){
+        try {
+            const { idCurso } = req.body;
+            const idProfesor = (req as any).user?._id;
+
+            if (!idCurso) {
+                return res.status(400).json({message : "Se requiere idCurso"});
+            }
+
+            const curso = await CursosService.getById(idCurso);
+            if (!curso) {
+                return res.status(404).json({message : "Curso no encontrado"});
+            }
+
+            const profesorId = typeof curso.profesor === 'object' ? curso.profesor._id : curso.profesor;
+            
+            if (profesorId.toString() !== idProfesor) {
+                return res.status(403).json({message : "No tienes permiso para finalizar este curso"});
+            }
+
+            const cursoActualizado = await CursosService.updateOne(idCurso, { estado:'COMPLETADO' } as any);
+
+            await InscripcionesService.finalizarCurso(idCurso);
+
+            res.status(200).json({ 
+                message: 'Curso finalizado exitosamente',
+                curso: cursoActualizado 
+            });
+        } catch (error) {
+            if (error instanceof HttpError) {
+                return res.status(error.status).json({message : error.message})
+            }
+            console.error(error);
+            res.status(500).json({message: "Error al finalizar el curso"});
         }
     }
 }

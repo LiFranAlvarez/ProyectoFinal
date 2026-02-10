@@ -4,7 +4,7 @@ import HttpError from '../utils/httpError';
 import "../models/clase.schema";
 import "../models/material.schema"
 
-export type EstadoCurso = 'COMPLETADO' | 'EN CURSO' | 'CANCELADO';
+export type EstadoCurso = 'COMPLETADO' | 'EN CURSO' | 'CANCELADO' | 'PENDIENTE';
 
 export interface ICurso {
     _id?: Types.ObjectId; 
@@ -17,7 +17,7 @@ export interface ICurso {
 class CursosService {
     async getAll(): Promise<ICurso[]>{
         try {
-            return await Curso.find();
+            return await Curso.find().populate('profesor', 'nombre');
         } catch (error) {
             throw new HttpError("Error DB buscando cursos (CursosService: getAll)", 500);
         }
@@ -25,6 +25,7 @@ class CursosService {
     async createOne( data : ICurso){ 
         try {
             const result = await Curso.create(data);
+            await result.populate('profesor', 'nombre');
             return result;
         } catch (error) {
             throw new HttpError("No se pudo crear curso (CursosService.createOne)", 500);
