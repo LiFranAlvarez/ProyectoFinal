@@ -12,15 +12,12 @@ export async function signInController(req: Request, res: Response) {
         if (!result) {
             return res.status(401).json({ message: 'No se pudo Iniciar Sesion' });
         }
-
-        // Token de acceso (1 hora)
         const accessToken = Jwt.sign(
             { id: result.id, rol: result.rol },
             config.SECRET,
-            { expiresIn: "1h" }
+            { expiresIn: "24h" }
         );
 
-        // Refresh Token (7 días) - ¡AHORA INCLUYE EL ROL!
         const refreshToken = Jwt.sign(
             { id: result.id, rol: result.rol }, 
             config.REFRESH_SECRET,
@@ -48,7 +45,6 @@ export const refreshTokenController = async (req: Request, res: Response) => {
     try {
         const decoded = Jwt.verify(refreshToken, config.REFRESH_SECRET) as any;
 
-        // Generamos nuevo Access Token usando el rol que viene en el refresh
         const newAccessToken = Jwt.sign(
             { id: decoded.id, rol: decoded.rol }, 
             config.SECRET, 
